@@ -28,11 +28,15 @@ jobs:
           npm install
           npm run build --if-present
 
+      # Zip artifacts to speed things up
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -qr
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: alleva
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,4 +58,4 @@ jobs:
           app-name: 'AllevaApp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8CD02DF9B81E43FBA539D7723FC3A1C4 }}
-          package: alleva
+          package: release.zip
