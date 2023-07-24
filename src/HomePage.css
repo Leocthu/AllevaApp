@@ -1,0 +1,11 @@
+.tableContainer {
+    display: flex;
+    justify-content: flex-end;
+    border-radius: 10px;
+  }
+  
+  .tableOutline {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
