@@ -6,7 +6,7 @@ import 'datatables.net-dt';
 import imageSrc from './BodyReference.jpeg';
 import allevamedicallogo from './allevamedicallogo.png';
 
-import { getDatabase, ref, push } from 'firebase/database';
+import { ref, push } from 'firebase/database';
 import { auth, database } from './firebase';
 
 function TableComponent() {
