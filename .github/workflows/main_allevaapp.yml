@@ -33,6 +33,8 @@ jobs:
           name: node-app
           path: .
 
+      
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -54,3 +56,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76199956768849C69D6EDD92BC446293 }}
           package: .
+
+      - name: Start the application
+        run: npx serve -s build/
