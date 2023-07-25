@@ -10,6 +10,11 @@ import { getDatabase, ref, push } from 'firebase/database';
 import { auth, database } from './firebase';
 
 function TableComponent() {
+  const [nurseName, setNurseName] = useState('');
+  const [orderDate, setOrderDate] = useState('');
+  const [compName, setCompName] = useState('');
+  const [orderNum, setOrderNum] = useState('');
+
   useEffect(() => {
     $(document).ready(function() {
       $('#myTable').DataTable();
@@ -48,8 +53,15 @@ function TableComponent() {
 
 
   const handleOrderbtn = () => {
+    const user = auth.currentUser;
+    if (!user){
+      console.log('User not authenticated');
+      return;
+    }
+    const uniqId = `${compName}-${nurseName}-${orderDate}-${orderNum}`;
+    const userId = user.uid;
     // Get a reference to the 'orders' node in the Firebase Realtime Database
-    const ordersRef = ref(database, 'orders');
+    const ordersRef = ref(database, `users/${userId}/orders/${uniqId}`);
 
     // Prepare the data to be saved
     const ordersData = tableData.map((row) => ({
@@ -58,11 +70,18 @@ function TableComponent() {
       userInput2: row.userInput2,
     }));
 
+    
     // Push the data to the 'orders' node in the database
     push(ordersRef, ordersData)
       .then(() => {
         // Data saved successfully, you can perform any additional actions here
         console.log('Data saved successfully!');
+        handleClearBtn(); // Call handleClearBtn to reset the table data
+        setCompName(''); // Reset the input variables
+        setNurseName('');
+        setOrderDate('');
+        setOrderNum('');
+
       })
       .catch((error) => {
         // Handle errors if any
@@ -80,7 +99,6 @@ function TableComponent() {
 
     // Update the state with the cleared data
     setTableData(clearedData);
-    setEmptyInputmsg('');
   };
   
 
@@ -93,6 +111,44 @@ function TableComponent() {
       </header>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '10px', backgroundColor: 'light grey'}}>
         <div id="tableContainer" style={{ marginTop: '200px', marginRight: '70px', paddingRight: '50px'}}>
+          <div style={{ display: 'flex', marginBottom: '20px'}}>
+            <div style={{ marginRight: '20px' }}>
+              <label className="company">Company: </label>
+              <input
+                type="text"
+                value={compName}
+                onChange={(e) => setCompName(e.target.value)}
+              />
+            </div>
+            <div style={{ marginRight: '20px' }}>
+              <label className="nurse">Nurse's Name:</label>
+              <input
+                type="text"
+                value={nurseName}
+                onChange={(e) => setNurseName(e.target.value)}
+              />
+            </div>
+            <div style={{ marginRight: '20px' }}>
+              <label className="date">Date:</label>
+              <input
+                type="date"
+                value={orderDate}
+                onChange={(e) => setOrderDate(e.target.value)}
+              />
+            </div> 
+            <div>
+              <label className="orderNum">Order #:</label>
+              <input
+                type="text"
+                value={orderNum}
+                onChange={(e) => setOrderNum(e.target.value)}
+              />
+            </div> 
+          </div>
+          
+          
+          
+          
           <table style={{ width: '100%' }}>
             <thead>
               <tr>
