@@ -61,7 +61,7 @@ jobs:
         with:
           app-name: 'AllevaApp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76199956768849C69D6EDD92BC446293 }}
+          publish-profile: ${{ secrets.PUBLISHPROFILE }}
           package: .
 
       - name: 'Clean up artifacts'
