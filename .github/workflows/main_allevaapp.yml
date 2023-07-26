@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      
       - uses: actions/checkout@v2
 
       - name: Set up Node.js version
@@ -57,11 +58,11 @@ jobs:
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: "azure/webapps-deploy@v2"
         with:
           app-name: 'AllevaApp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.PUBLISHPROFILE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76199956768849C69D6EDD92BC446293 }}
           package: .
 
       - name: 'Clean up artifacts'
