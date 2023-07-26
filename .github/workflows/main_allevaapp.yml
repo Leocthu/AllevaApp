@@ -54,7 +54,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: |
           unzip -q release.zip
-          rm release.zip
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -63,4 +62,8 @@ jobs:
           app-name: 'AllevaApp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76199956768849C69D6EDD92BC446293 }}
-          package: release.zip
+          package: .
+
+      - name: 'Clean up artifacts'
+        run: | 
+          rm release.zip
