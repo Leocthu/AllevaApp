@@ -56,13 +56,6 @@ jobs:
         run: |
           unzip -q release.zip
 
-      - name: 'Set application settings'
-        uses: azure/appservice-settings@v1
-        with:
-            app-name: 'AllevaApp'
-            slot-name: 'Production'
-            app-settings-json: '{"SCM_DO_BUILD_DURING_DEPLOYMENT":"true"}'
-
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: "azure/webapps-deploy@v2"
