@@ -9,25 +9,32 @@
   padding: 10px;
 }
 
-.Orderbtn{
-  margin: 30px;
-  margin-right: 200px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-right: 20px;
-  padding-left: 20px;
-
-  background-color: lightblue; 
-  
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 50px;
 }
 
+/* Apply the common styles for all buttons */
+.Backbtn,
+.Orderbtn,
+.Confirmbtn,
+.clearbtn {
+  background-color: lightblue;
+  padding: 15px 40px; /* Apply padding for top/bottom and right/left */
+}
 
-.clearbtn{
-  padding-right: 40px;
-  padding-left: 40px;
-  background-color: lightblue; 
-  padding-top: 15px;  
-  padding-bottom: 15px;    
+.Confirmbtn{
+  margin-right: 15px;
+}
+
+.Backbtn{
+  margin-right: 15px;
+}
+
+.clearbtn {
+  margin-right: 15px;
+  margin-left: 15px;
 }
 
 
