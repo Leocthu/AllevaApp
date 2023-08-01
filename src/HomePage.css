@@ -20,7 +20,7 @@
 .Orderbtn,
 .Confirmbtn,
 .clearbtn {
-  background-color: lightblue;
+  background-color: rgb(151, 201, 218);
   padding: 15px 40px; /* Apply padding for top/bottom and right/left */
 }
 
@@ -30,6 +30,7 @@
 
 .Backbtn{
   margin-right: 15px;
+  
 }
 
 .clearbtn {
