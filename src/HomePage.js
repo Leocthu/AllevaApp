@@ -120,7 +120,6 @@ function TableComponent() {
   return (
     <div>
       <header className = "login-header" style={{ backgroundColor: 'lightblue' }}>
-          <Navigation />
           <img src={allevamedicallogo} alt="Logo" className="logo-image" />
       </header>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'light grey'}}>

@@ -42,7 +42,6 @@ function App() {
           <Route path="/" element={<LoginPage handleSignUp={handleSignUp} handleSignIn={handleSignIn} />} />
           <Route path="/home" element={<TableComponent />} />
           <Route path="/UserSignUp" element={<UserSignUp />} />
-          <Route path="/Profile" element={<Profile />}/>
         </Routes>
       </div>
     </Router>
