@@ -42,3 +42,12 @@
 .docInfo div {
   margin-bottom: 30px;
 }
+
+.login-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px; /* Adjust padding as needed */
+
+}
+

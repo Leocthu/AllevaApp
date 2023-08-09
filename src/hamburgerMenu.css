@@ -1,0 +1,55 @@
+/* HamburgerMenu.css */
+.hamburger-menu {
+    position: relative;
+    padding-right: 3px;
+    padding-top: 3px;
+    padding-left: 3px;
+  }
+  
+.menu-icon img {
+    cursor: pointer;
+}
+  
+/* HamburgerMenu.css */
+.menu-links {
+    position: absolute;
+    top: 100%;
+    right: 0; /* Change 'left' to 'right' */
+    width: 140px; /* Adjust the width as needed */
+    background-color: transparent;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s, transform 0.3s;
+    list-style: none;
+    border-radius: 15px;
+ 
+
+}
+
+.menu-links a{
+    border-radius: 15px;
+    border: 1px solid #ccc; /* Add border style */
+    padding: 5px 15px;
+    display: block; /* Make the links expand to full width */
+    text-decoration: none;
+    color: #333; /* Set link color */
+    font-weight: bold;
+    margin: 15px 0; /* Add spacing between links */
+    background-color: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
+.hamburger-menu.open .menu-links {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+  
+.menu-links.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+  
+  

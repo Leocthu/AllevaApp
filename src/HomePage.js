@@ -9,6 +9,8 @@ import dicut from './dicut.jpg';
 
 import { ref, push } from 'firebase/database';
 import { auth, database } from './firebase';
+import HamburgerMenu from './hamburgerMenu';
+
 
 function TableComponent() {
   const [nurseName, setNurseName] = useState('');
@@ -119,8 +121,14 @@ function TableComponent() {
 
   return (
     <div>
+      
       <header className = "login-header" style={{ backgroundColor: 'lightblue' }}>
-          <img src={allevamedicallogo} alt="Logo" className="logo-image" />
+        <img src={allevamedicallogo} alt="Logo" className="logo-image" />
+        <div style={{marginRight: '10px', backgroundColor: 'white', borderRadius: '10px'}}>
+          <HamburgerMenu/>
+        </div>
+        
+        
       </header>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'light grey'}}>
         <div id="tableContainer" style={{ marginTop: '100px', marginRight: '70px', paddingRight: '50px', paddingTop: '70px'}}>
