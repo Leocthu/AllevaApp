@@ -41,11 +41,9 @@ function LoginPage() {
       <div className="login-container">
         <header className = "login-header">
           <img src={allevamedicallogo} alt="Logo" className="logo-image" />
-          
         </header>
         <div className="login-box">
           <h2>Sign In</h2>
-          
           <input
             type="text"
             placeholder="Username"
@@ -59,7 +57,6 @@ function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
           {errorMessage && <p className="error-message">{errorMessage}</p>}
-        
           <button className ="signin-btn" onClick={handleSignIn}>Sign In</button>
           <div className="or-container">
             <div className="line"></div>
@@ -68,7 +65,7 @@ function LoginPage() {
           </div>
           <div className = "signup-cont">
             
-            <h4>New to Alleva?</h4>
+            <h4>New to Alleva Medical?</h4>
             <button className ="signup-btn"onClick={handleSignUp}>Sign Up</button>
           </div>
             
