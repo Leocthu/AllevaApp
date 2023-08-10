@@ -5,6 +5,7 @@ import TableComponent from './HomePage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { auth } from './firebase';
 import UserSignUp from './UserSignUp';
+import OrderSearch from './orderSearch';
 
 
 
@@ -40,8 +41,9 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<LoginPage handleSignUp={handleSignUp} handleSignIn={handleSignIn} />} />
-          <Route path="/home" element={<TableComponent />} />
+          <Route path="/HomePage" element={<TableComponent />} />
           <Route path="/UserSignUp" element={<UserSignUp />} />
+          <Route path="/orderSearch" element={<OrderSearch />} />
         </Routes>
       </div>
     </Router>

@@ -22,7 +22,7 @@ function LoginPage() {
         console.log('Sign in success:', user);
 
         // Redirect to the home page
-        navigate('/home');
+        navigate('/HomePage');
       })
       .catch((error) => {
         // Handle login errors

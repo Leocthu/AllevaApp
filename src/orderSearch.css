@@ -1,0 +1,24 @@
+.orderTable {
+  display: flex;
+  align-items: center; /* Center vertically */
+  border-radius: 10px;
+  margin: 50px auto; /* Center horizontally and provide margin */
+  max-width: 1750px; /* Set a maximum width */
+  max-height: 500px;;
+  padding: 20px;
+  background-color: #f0f0f0;
+  justify-content: center;
+}
+
+
+
+
+.searchbtn {
+    padding: 15px;
+}
+
+.search-input{
+    padding: 15px;
+    width: 400px;
+    margin-right: 10px;
+}

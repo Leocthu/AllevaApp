@@ -18,8 +18,9 @@ function HamburgerMenu() {
       </div>
       <ul className="menu-links">
         <li className="a">
-            <Link to="/home">Home</Link>
+            <Link to="/HomePage">Home</Link>
             <Link to="/">Sign Out</Link>
+            <Link to="/orderSearch">Search Order</Link>
         </li>
       </ul>
     </div>
