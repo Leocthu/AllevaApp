@@ -3,53 +3,96 @@ import { useNavigate } from 'react-router-dom';
 import { auth, database } from './firebase';
 import allevamedicallogo from './allevamedicallogo.png';
 import './UserSignUp.css'
-import { ref, set } from "firebase/database";
+import { ref, set, get } from "firebase/database";
 
-function writeUserData(userId, name, company, email, mobile){
-  const reference = ref(database, 'users/' + userId);
+function writeUserData(userId, CompanyName, name, email, mobile, role){
+  const reference = ref(database, 'company/' + CompanyName + userId);
 
   set(reference,{
     name: name,
     username: email,
-    company: company,
     mobile: mobile,
-    role: 'client'
-  })
+    company: CompanyName,
+    role: role
+  });
 }
 
 function UserSignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState(''); // Add state for first name
-  const [company, setCompany] = useState(''); // Add state for company
+  const [CompanyName, setCompany] = useState(''); // Add state for company
   const [mobile, setMobile] = useState(''); // Add state for mobile phone number
 
   const navigate = useNavigate();
 
   const handleSignUp = (event) => {
     event.preventDefault();
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // User successfully signed up
-        const user = userCredential.user;
-        console.log('Sign up success:', user);
 
-        const userData = {
-          firstName: firstName,
-          company: company,
-          email: email,
-          mobile: mobile,
-          role: 'client'
-        };
+    // Check if the company already exists in the database
+    const companyRef = ref(database, 'company/'+CompanyName);
 
-        writeUserData(user.uid, userData.firstName, userData.company, userData.email, userData.mobile, userData.role);
 
-        // Redirect to the home page (you can change '/home' to the desired path)
-        navigate('/HomePage');
+    get(companyRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          // Company exists, create the user under the existing company
+          auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log('Sign up success:', user);
+
+              const userData = {
+                firstName: firstName,
+                email: email,
+                mobile: mobile,
+                CompanyName: CompanyName,
+                role: 'client'
+              };
+
+              writeUserData(user.uid, userData.CompanyName, userData.firstName, userData.email, userData.mobile, userData.role);
+
+              navigate('/HomePage');
+            })
+            .catch((error) => {
+              console.log('Sign up error:', error);
+            });
+        } else {
+          // Company doesn't exist, create a new company node and user
+          const newCompanyData = {
+            name: CompanyName
+          };
+
+          set(companyRef, newCompanyData)
+            .then(() => {
+              auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                  const user = userCredential.user;
+                  console.log('Sign up success:', user);
+
+                  const userData = {
+                    firstName: firstName,
+                    email: email,
+                    mobile: mobile,
+                    CompanyName: CompanyName,
+                    role: 'client'
+                  };
+
+                  writeUserData(user.uid, userData.CompanyName, userData.firstName, userData.email, userData.mobile, userData.role);
+
+                  navigate('/HomePage');
+                })
+                .catch((error) => {
+                  console.log('Sign up error:', error);
+                });
+            })
+            .catch((error) => {
+              console.log('Error creating company:', error);
+            });
+        }
       })
       .catch((error) => {
-        // Handle sign up errors
-        console.log('Sign up error:', error);
+        console.log('Error checking company:', error);
       });
   };
 
@@ -75,7 +118,7 @@ function UserSignUp() {
           <input
             type="text"
             placeholder="Company"
-            value={company}
+            value={CompanyName}
             onChange={(e) => setCompany(e.target.value)}
           />
           <input

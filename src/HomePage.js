@@ -64,7 +64,7 @@ function TableComponent() {
     const uniqId = `${compName}-${nurseName}-${orderDate}`;
     const userId = user.uid;
     // Get a reference to the 'orders' node in the Firebase Realtime Database
-    const ordersRef = ref(database, `users/${userId}/orders/${uniqId}`);
+    const ordersRef = ref(database, `company/${compName}/${userId}/Orders/${uniqId}`);
 
     // Prepare the data to be saved
     const ordersData = tableData.map((row) => ({
