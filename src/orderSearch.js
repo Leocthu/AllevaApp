@@ -65,42 +65,38 @@ function OrderSearch() {
                     className="search-input"
                 />
                 <button onClick={handleSearch} className="searchbtn">Search</button>
-                <h2>Order Details</h2>
                 {searchedOrder && (
-                    <div className="orderTable">
-                        
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>Body Number</th>
-                                <th>Body Part</th>
-                                <th>Left Measurement</th>
-                                <th>Right Measurement</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                {searchedOrder[0].map((row, index) => (
-                                    <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{row.name}</td>
-                                    <td>{row.userInput1}</td>
-                                    <td>{row.userInput2}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <div style={{ marginBottom: '250px' }}>
-                            <img src={imageSrc} alt="bodypic" style={{ width: '100%', height: 'auto', paddingTop: '150px', marginRight: '75px'}} />
+                    <div>
+                        <div className="orderTable">
+                            <h2>Order Details</h2>
+                            <table className="table">
+                                <thead>
+                                <tr>
+                                    <th>Body Number</th>
+                                    <th>Body Part</th>
+                                    <th>Left Measurement</th>
+                                    <th>Right Measurement</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {searchedOrder[0].map((row, index) => (
+                                        <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{row.name}</td>
+                                        <td>{row.userInput1}</td>
+                                        <td>{row.userInput2}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-                        <div style={{ marginBottom: '250px' }}>
-                            <img src={dicut} alt="dicutpic" style={{ width: '85%', height: 'auto', paddingTop: '150px', marginRight: '75px'}} />
+                        <div>
+                            <img src={imageSrc} alt="bodypic" style={{ width: '22%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
+                            <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
                         </div>
-                        
                     </div>
                 )}
-                
             </div>
-            
         </div>
     );
 }
