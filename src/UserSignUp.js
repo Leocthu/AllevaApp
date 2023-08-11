@@ -12,7 +12,8 @@ function writeUserData(userId, name, company, email, mobile){
     name: name,
     username: email,
     company: company,
-    mobile: mobile
+    mobile: mobile,
+    role: 'client'
   })
 }
 
@@ -38,12 +39,13 @@ function UserSignUp() {
           company: company,
           email: email,
           mobile: mobile,
+          role: 'client'
         };
 
-        writeUserData(user.uid, userData.firstName, userData.company, userData.email, userData.mobile);
+        writeUserData(user.uid, userData.firstName, userData.company, userData.email, userData.mobile, userData.role);
 
         // Redirect to the home page (you can change '/home' to the desired path)
-        navigate('/home');
+        navigate('/HomePage');
       })
       .catch((error) => {
         // Handle sign up errors
