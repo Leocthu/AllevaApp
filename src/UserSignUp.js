@@ -6,7 +6,7 @@ import './UserSignUp.css'
 import { ref, set, get } from "firebase/database";
 
 function writeUserData(userId, CompanyName, name, email, mobile, role){
-  const reference = ref(database, 'company/' + CompanyName + userId);
+  const reference = ref(database, 'company/' + CompanyName + '/' + userId);
 
   set(reference,{
     name: name,
@@ -28,11 +28,12 @@ function UserSignUp() {
 
   const handleSignUp = (event) => {
     event.preventDefault();
-
+    
     // Check if the company already exists in the database
-    const companyRef = ref(database, 'company/'+CompanyName);
-
-
+    const companyRef = ref(database, 'company/' + CompanyName);
+    console.log('Company Name:', CompanyName);
+    console.log('Company Ref:', companyRef.toString());
+  
     get(companyRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -42,6 +43,7 @@ function UserSignUp() {
               const user = userCredential.user;
               console.log('Sign up success:', user);
 
+  
               const userData = {
                 firstName: firstName,
                 email: email,
@@ -50,7 +52,26 @@ function UserSignUp() {
                 role: 'client'
               };
 
+              
+  
+              // Write user data under the existing company node
               writeUserData(user.uid, userData.CompanyName, userData.firstName, userData.email, userData.mobile, userData.role);
+              
+
+              const databaseRef = ref(database, 'users/' + user.uid);
+              const data = {
+                Company: CompanyName,
+              };
+
+              // Write data to the database
+              set(databaseRef, data)
+                .then(() => {
+                  console.log('Data has been written successfully.');
+                })
+                .catch((error) => {
+                  console.error('Error writing data:', error);
+                });
+
 
               navigate('/HomePage');
             })
@@ -58,36 +79,46 @@ function UserSignUp() {
               console.log('Sign up error:', error);
             });
         } else {
-          // Company doesn't exist, create a new company node and user
-          const newCompanyData = {
-            name: CompanyName
-          };
-
-          set(companyRef, newCompanyData)
+          set(companyRef, CompanyName)
             .then(() => {
-              auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                  const user = userCredential.user;
-                  console.log('Sign up success:', user);
+              // After creating the company node, create the user
+              return auth.createUserWithEmailAndPassword(email, password);
+            })
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log('Sign up success:', user);
+  
+              const userData = {
+                firstName: firstName,
+                email: email,
+                mobile: mobile,
+                CompanyName: CompanyName,
+                role: 'client'
+              };
+  
+              // Write user data under the newly created company node
+              writeUserData(user.uid, userData.CompanyName, userData.firstName, userData.email, userData.mobile, userData.role);
+              
+              const databaseRef = ref(database, 'users/' + user.uid);
+              const data = {
+                Company: CompanyName,
+              };
 
-                  const userData = {
-                    firstName: firstName,
-                    email: email,
-                    mobile: mobile,
-                    CompanyName: CompanyName,
-                    role: 'client'
-                  };
-
-                  writeUserData(user.uid, userData.CompanyName, userData.firstName, userData.email, userData.mobile, userData.role);
-
-                  navigate('/HomePage');
+              // Write data to the database
+              set(databaseRef, data)
+                .then(() => {
+                  console.log('Data has been written successfully.');
                 })
                 .catch((error) => {
-                  console.log('Sign up error:', error);
+                  console.error('Error writing data:', error);
                 });
+
+
+
+              navigate('/HomePage');
             })
             .catch((error) => {
-              console.log('Error creating company:', error);
+              console.log('Sign up error:', error);
             });
         }
       })
@@ -95,6 +126,7 @@ function UserSignUp() {
         console.log('Error checking company:', error);
       });
   };
+  
 
   const handleBackToSignIn = () => {
     // Redirect to the sign-in page (you can change '/signin' to the desired path)

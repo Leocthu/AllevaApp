@@ -16,33 +16,53 @@ function OrderSearch() {
     const [searchedOrder, setSearchedOrder] = useState(null);
 
     const handleSearch = () => {
+
         const user = auth.currentUser;
         const userId = user.uid;
+        let CompanyName = "";
+        
         try {
             if (userId && searchQuery) {
-              const orderRef = ref(database, `users/${userId}/orders/${searchQuery}`);
-              get(orderRef)
-                .then(orderSnapshot => {
-                  if (orderSnapshot.exists()) {
-                    const orderData = orderSnapshot.val();
-                    // Extract the data from the nested structure and convert it to an array
-                    const extractedData = Object.values(orderData); // Assuming each order is an object
+              // Construct the reference to the specified user's path
+              const userRef = ref(database, 'users/' + userId);
         
-                    setSearchedOrder(extractedData);
-               
+              // Retrieve the user's data and company name
+              get(userRef)
+                .then((snapshot) => {
+                  if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    CompanyName = userData.Company; // Set CompanyName inside the scope
                   } else {
-                    console.log('Order not found');
+                    console.log('User data not found.');
                   }
+        
+                  // Continue with the rest of the logic
+                  const orderRef = ref(database, `company/${CompanyName}/${userId}/Orders/${searchQuery}`);
+                  console.log(orderRef.toString());
+                  get(orderRef)
+                    .then(orderSnapshot => {
+                        if (orderSnapshot.exists()) {
+                            const orderData = orderSnapshot.val();
+                            // Extract the data from the nested structure and convert it to an array
+                            const extractedData = Object.values(orderData); // Assuming each order is an object
+                            setSearchedOrder(extractedData);
+                        } else {
+                            console.log('Order not found');
+                        }
+                    })
+                    .catch(error => {
+                      console.error('Error fetching order data:', error);
+                    });
                 })
-                .catch(error => {
-                  console.error('Error fetching order data:', error);
+                .catch((error) => {
+                  console.error('Error retrieving user data:', error);
                 });
             } else {
               console.log('Invalid userId or searchQuery');
             }
-        } catch (error) {
+          } catch (error) {
             console.error('Error fetching order data:', error);
-        }
+          }
     };
 
     
