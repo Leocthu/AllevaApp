@@ -7,7 +7,7 @@ import imageSrc from './BodyReference.jpeg';
 import allevamedicallogo from './allevamedicallogo.png';
 import dicut from './dicut.jpg';
 
-import { ref, push } from 'firebase/database';
+import { ref, push, get } from 'firebase/database';
 import { auth, database } from './firebase';
 import HamburgerMenu from './hamburgerMenu';
 
@@ -17,6 +17,7 @@ function TableComponent() {
   const [orderDate, setOrderDate] = useState('');
   const [compName, setCompName] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
+
 
   useEffect(() => {
     $(document).ready(function() {
@@ -63,6 +64,27 @@ function TableComponent() {
     }
     const uniqId = `${compName}-${nurseName}-${orderDate}`;
     const userId = user.uid;
+    let temp = 1;
+
+    const userRef = ref(database, 'users/' + userId);
+    console.log(userRef.toString());
+    get(userRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          const CompanyName = userData.Company; // Set CompanyName inside the scope
+          if (compName !== CompanyName){
+            console.error('Company Name Does Not Match');
+            temp = 0;
+            
+          }
+        } else {
+          console.log('User data not found.');
+        }
+    });
+    if (temp === 0){
+      return;
+    }
     // Get a reference to the 'orders' node in the Firebase Realtime Database
     const ordersRef = ref(database, `company/${compName}/${userId}/Orders/${uniqId}`);
 
@@ -72,6 +94,8 @@ function TableComponent() {
       userInput1: row.userInput1,
       userInput2: row.userInput2,
     }));
+
+
 
     
     // Push the data to the 'orders' node in the database
@@ -230,6 +254,7 @@ function TableComponent() {
               </tbody>
             </table>
           )}
+ 
           <div className="button-container">
             <button className="clearbtn" onClick={handleClearBtn}>Clear</button>
             <button className="Confirmbtn" onClick={handleConfirmBtn}>Confirm</button>
