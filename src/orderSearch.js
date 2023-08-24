@@ -14,6 +14,7 @@ function OrderSearch() {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchedOrder, setSearchedOrder] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSearch = () => {
 
@@ -42,12 +43,14 @@ function OrderSearch() {
                   get(orderRef)
                     .then(orderSnapshot => {
                         if (orderSnapshot.exists()) {
+                            setErrorMessage('');
                             const orderData = orderSnapshot.val();
                             // Extract the data from the nested structure and convert it to an array
                             const extractedData = Object.values(orderData); // Assuming each order is an object
                             setSearchedOrder(extractedData);
                         } else {
                             console.log('Order not found');
+                            setErrorMessage('Order not found. Please try again!');
                         }
                     })
                     .catch(error => {
@@ -85,6 +88,7 @@ function OrderSearch() {
                     className="search-input"
                 />
                 <button onClick={handleSearch} className="searchbtn">Search</button>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 {searchedOrder && (
                     <div>
                         <div className="orderTable">

@@ -7,9 +7,13 @@ import imageSrc from './BodyReference.jpeg';
 import allevamedicallogo from './allevamedicallogo.png';
 import dicut from './dicut.jpg';
 
-import { ref, push } from 'firebase/database';
+import { ref, push, get } from 'firebase/database';
 import { auth, database } from './firebase';
 import HamburgerMenu from './hamburgerMenu';
+
+import AWS from 'aws-sdk';
+
+
 
 
 function TableComponent() {
@@ -17,6 +21,7 @@ function TableComponent() {
   const [orderDate, setOrderDate] = useState('');
   const [compName, setCompName] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
+
 
   useEffect(() => {
     $(document).ready(function() {
@@ -63,6 +68,94 @@ function TableComponent() {
     }
     const uniqId = `${compName}-${nurseName}-${orderDate}`;
     const userId = user.uid;
+    let temp = 1;
+
+   
+
+    const emailRef = ref(database, `company/${compName}/${userId}/username`);
+    get(emailRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const emailValue = snapshot.val();
+
+        AWS.config.update({ 
+          region: 'us-west-1', 
+          apiVersion: 'latest',
+          credentials: {
+            accessKeyId: 'AKIAQUDNAIK6QT3D4WN3',
+            secretAccessKey: 'Ra8M1QAZzYs1ySj/uDRjW3VxvDiUPg4xyqJ+2k7a',
+          }
+        }); // Replace 'your-region' with the appropriate AWS region
+    
+        // Create a new SES instance
+        const ses = new AWS.SES();
+
+        const emailParams = {
+          Destination: {
+            ToAddresses: [emailValue], 
+          },
+          Message: {
+            Body: {
+              Text: {
+                Data: `
+                  Hello ${nurseName}, \n
+                  
+                  Thank you for placing your order! Your order has been confirmed and is currently pending approval. If you have any questions or need to make any changes to the order, please contact us at ###-###-####. \n
+                  
+                  Order Details: 
+                  Order Number: ${uniqId} \n
+                  
+                  Best Regards, 
+                  Alleva Manufacturing
+                `,
+              },
+            },
+            Subject: {
+              Data: 'Order Confirmation',
+            },
+          },
+          Source: 'allevamanufacturing.eric@gmail.com', // Replace with your SES verified email address
+        };
+
+        ses.sendEmail(emailParams, (err, data) => {
+          if (err) {
+            console.error('Error sending email:', err);
+          } else {
+            console.log('Email sent successfully:', data);
+          }
+        });
+        // Now you can use the emailValue to send an email to the recipient
+        // using AWS SES or any other email service.
+      } else {
+        console.log('Email data not found.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching email data:', error);
+    });
+
+  
+
+
+    const userRef = ref(database, 'users/' + userId);
+    console.log(userRef.toString());
+    get(userRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          const CompanyName = userData.Company; // Set CompanyName inside the scope
+          if (compName !== CompanyName){
+            console.error('Company Name Does Not Match');
+            temp = 0;
+            
+          }
+        } else {
+          console.log('User data not found.');
+        }
+    });
+    if (temp === 0){
+      return;
+    }
     // Get a reference to the 'orders' node in the Firebase Realtime Database
     const ordersRef = ref(database, `company/${compName}/${userId}/Orders/${uniqId}`);
 
@@ -72,6 +165,8 @@ function TableComponent() {
       userInput1: row.userInput1,
       userInput2: row.userInput2,
     }));
+
+
 
     
     // Push the data to the 'orders' node in the database
@@ -230,6 +325,7 @@ function TableComponent() {
               </tbody>
             </table>
           )}
+ 
           <div className="button-container">
             <button className="clearbtn" onClick={handleClearBtn}>Clear</button>
             <button className="Confirmbtn" onClick={handleConfirmBtn}>Confirm</button>

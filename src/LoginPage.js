@@ -68,9 +68,6 @@ function LoginPage() {
             <h4>New to Alleva Medical?</h4>
             <button className ="signup-btn"onClick={handleSignUp}>Sign Up</button>
           </div>
-            
-       
-          
         </div>
       </div>
     
