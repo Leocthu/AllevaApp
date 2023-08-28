@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { auth } from './firebase';
 import UserSignUp from './UserSignUp';
 import OrderSearch from './orderSearch';
+import ReviewAllOrders from './ReviewAllOrders';
 
 
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/HomePage" element={<TableComponent />} />
           <Route path="/UserSignUp" element={<UserSignUp />} />
           <Route path="/orderSearch" element={<OrderSearch />} />
+          <Route path="/ReviewAllOrders" element={<ReviewAllOrders />} />
         </Routes>
       </div>
     </Router>

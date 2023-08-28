@@ -63,6 +63,9 @@ function HamburgerMenu() {
             {userRole === 'admin' && (
               <Link to="/orderSearch">Search Order</Link>
             )}
+            {userRole === 'admin' && (
+              <Link to="/ReviewAllOrders">Pending Orders</Link>
+            )}
             <Link to="/">Sign Out</Link>
         </li>
       </ul>
