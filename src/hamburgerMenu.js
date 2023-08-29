@@ -60,9 +60,7 @@ function HamburgerMenu() {
       <ul className="menu-links">
         <li className="a">
             <Link to="/HomePage">Home</Link>
-            {userRole === 'admin' && (
-              <Link to="/orderSearch">Search Order</Link>
-            )}
+            <Link to="/orderSearch">Search Order</Link>
             {userRole === 'admin' && (
               <Link to="/ReviewAllOrders">Pending Orders</Link>
             )}
