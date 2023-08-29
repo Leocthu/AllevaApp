@@ -31,3 +31,20 @@ background-color: #e0e0e0;
 .order-table th {
     background-color: #f2f2f2;
 }
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+  
+.buttonContainer button {
+    padding: 10px 20px; /* Adjust padding as needed */
+    font-size: 14px; /* Adjust font size as needed */
+    margin: 0 10px;
+}
+  
+.btnContainer {
+    text-align: center; /* Center the buttons */
+}
+  

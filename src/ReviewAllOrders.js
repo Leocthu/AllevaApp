@@ -18,10 +18,14 @@ function ReviewAllOrders() {
             const pendingOrdersRef = ref(database, 'admin/Pending Orders');
             const pendingOrdersSnapshot = await get(pendingOrdersRef);
             const pendingOrdersData = pendingOrdersSnapshot.val();
+            
     
             if (pendingOrdersData) {
                 const orderIds = Object.keys(pendingOrdersData);
+                console.log(orderIds);
                 setPendingOrders(orderIds);
+            } else {
+              setPendingOrders([]); // Update to an empty array when no pending orders
             }
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -69,7 +73,26 @@ function ReviewAllOrders() {
             console.error('Error approving order:', error);
           }
         }
-      };
+    };
+
+    const handleDelPending = async () => {
+      if (selectedOrder) {
+        try {
+
+          // Delete the selected order from the pending orders node
+          await remove(ref(database, `admin/Pending Orders/${selectedOrderId}`));
+          
+          // Clear the selected order from state
+          setSelectedOrder(null);
+          setSelectedOrderId(null); // Clear the selected order ID
+          
+          // Refresh the pending orders list
+          await fetchPendingOrders();
+        } catch (error) {
+          console.error('Error approving order:', error);
+        }
+      }
+  };
   
     return (
       <div>
@@ -117,7 +140,13 @@ function ReviewAllOrders() {
                 </table>
                
             </div>
-            <button className="approveBtn" onClick={handleApproval} style={{display: 'flex', marginLeft: '883px', marginTop: '15px', padding: '15px'}}>Approve Order</button>
+            <div className='btnContainer'>
+              <div className="buttonContainer">
+                <button className="removeBtn" onClick={handleDelPending}>Delete Order</button>
+                <button className="approveBtn" onClick={handleApproval}>Approve Order</button>
+              </div>
+            </div>
+
             <img src={imageSrc} alt="bodypic" style={{ width: '22%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
             <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
           </div>
