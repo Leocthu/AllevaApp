@@ -7,7 +7,16 @@
     margin: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 300px;
 }
+
+.order-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between items */
+    margin-left: 73px;
+}
+  
   
 .order-button:hover {
 background-color: #e0e0e0;
@@ -19,6 +28,7 @@ background-color: #e0e0e0;
     border-collapse: collapse;
     width: 75%;
     border: 2px solid #ddd; /* Outline style */
+    margin-right: 30px;
 }
   
 .order-table th,
@@ -47,4 +57,7 @@ background-color: #e0e0e0;
 .btnContainer {
     text-align: center; /* Center the buttons */
 }
+  
+
+
   

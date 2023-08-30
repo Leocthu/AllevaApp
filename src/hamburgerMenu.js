@@ -59,10 +59,14 @@ function HamburgerMenu() {
       </div>
       <ul className="menu-links">
         <li className="a">
-            <Link to="/HomePage">Home</Link>
+            <Link to="/UserProfile">Profile</Link>
+            <Link to="/HomePage">Order Page</Link>
             <Link to="/orderSearch">Search Order</Link>
             {userRole === 'admin' && (
               <Link to="/ReviewAllOrders">Pending Orders</Link>
+            )}
+            {userRole === 'admin' && (
+              <Link to="/ApprovedOrders">Approved Orders</Link>
             )}
             <Link to="/">Sign Out</Link>
         </li>

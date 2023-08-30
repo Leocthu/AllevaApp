@@ -7,6 +7,8 @@ import { auth } from './firebase';
 import UserSignUp from './UserSignUp';
 import OrderSearch from './orderSearch';
 import ReviewAllOrders from './ReviewAllOrders';
+import ApprovedOrders from './ApprovedOrders';
+import UserProfile from './UserProfile';
 
 
 
@@ -46,6 +48,8 @@ function App() {
           <Route path="/UserSignUp" element={<UserSignUp />} />
           <Route path="/orderSearch" element={<OrderSearch />} />
           <Route path="/ReviewAllOrders" element={<ReviewAllOrders />} />
+          <Route path="/ApprovedOrders" element={<ApprovedOrders />} />
+          <Route path="/UserProfile" element={<UserProfile />} />
         </Routes>
       </div>
     </Router>

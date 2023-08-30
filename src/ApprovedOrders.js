@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import allevamedicallogo from './allevamedicallogo.png';
 import { database } from './firebase';
-import { ref, get, set, remove } from 'firebase/database';
+import { ref, get, remove } from 'firebase/database';
 import HamburgerMenu from './hamburgerMenu';
 import './ReviewAllOrders.css';
 import imageSrc from './BodyReference.jpeg';
 import dicut from './dicut.jpg';
 
-function ReviewAllOrders() {
-    const [pendingOrders, setPendingOrders] = useState([]);
+function ApprovedOrders() {
+    const [ApprovedOrders, setApprovedOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [selectedOrderId, setSelectedOrderId] = useState(null); // Store selected order ID
     
     
-    const fetchPendingOrders = async () => {
+    const fetchApprovedOrders = async () => {
       try {
-          const pendingOrdersRef = ref(database, 'admin/Pending Orders');
-          const pendingOrdersSnapshot = await get(pendingOrdersRef);
-          const pendingOrdersData = pendingOrdersSnapshot.val();
+          const approvedOrdersRef = ref(database, 'admin/Approved Orders');
+          const approvedOrdersSnapshot = await get(approvedOrdersRef);
+          const approvedOrdersData = approvedOrdersSnapshot.val();
   
-          if (pendingOrdersData) {
+          if (approvedOrdersData) {
               // Extract and sort order IDs based on dates
-              const orderIds = Object.keys(pendingOrdersData);
+              const orderIds = Object.keys(approvedOrdersData);
               const sortedOrderIds = orderIds.sort((a, b) => {
                   const dateA = new Date(a.split('-').slice(-3).join('-'));
                   const dateB = new Date(b.split('-').slice(-3).join('-'));
@@ -29,9 +29,9 @@ function ReviewAllOrders() {
               });
   
               console.log(sortedOrderIds);
-              setPendingOrders(sortedOrderIds);
+              setApprovedOrders(sortedOrderIds);
           } else {
-              setPendingOrders([]);
+              setApprovedOrders([]);
           }
       } catch (error) {
           console.error('Error fetching data:', error);
@@ -41,13 +41,13 @@ function ReviewAllOrders() {
 
 
     useEffect(() => {     
-        fetchPendingOrders();
+        fetchApprovedOrders();
     }, []);
   
     const handleOrderClick = async (orderId) => {
       setSelectedOrderId(orderId);
       try {
-        const orderSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}`));
+        const orderSnapshot = await get(ref(database, `admin/Approved Orders/${orderId}`));
         const orderDetails = orderSnapshot.val();
   
         if (orderDetails) {
@@ -58,49 +58,25 @@ function ReviewAllOrders() {
       }
     };
 
-    const handleApproval = async () => {
+    const handleDelApproved = async () => {
         if (selectedOrder) {
           try {
-            // Create a reference to the approved orders node
-            const approvedOrdersRef = ref(database, `admin/Approved Orders/${selectedOrderId}`);
-            
-            // Push the selected order to the approved orders node
-            await set(approvedOrdersRef, selectedOrder);
-            
+  
             // Delete the selected order from the pending orders node
-            await remove(ref(database, `admin/Pending Orders/${selectedOrderId}`));
+            await remove(ref(database, `admin/Approved Orders/${selectedOrderId}`));
             
             // Clear the selected order from state
             setSelectedOrder(null);
             setSelectedOrderId(null); // Clear the selected order ID
             
             // Refresh the pending orders list
-            fetchPendingOrders();
+            await fetchApprovedOrders();
           } catch (error) {
             console.error('Error approving order:', error);
           }
         }
     };
 
-    const handleDelPending = async () => {
-      if (selectedOrder) {
-        try {
-
-          // Delete the selected order from the pending orders node
-          await remove(ref(database, `admin/Pending Orders/${selectedOrderId}`));
-          
-          // Clear the selected order from state
-          setSelectedOrder(null);
-          setSelectedOrderId(null); // Clear the selected order ID
-          
-          // Refresh the pending orders list
-          await fetchPendingOrders();
-        } catch (error) {
-          console.error('Error approving order:', error);
-        }
-      }
-  };
-  
     return (
       <div>
         <header className="login-header" style={{ backgroundColor: 'lightblue' }}>
@@ -110,9 +86,9 @@ function ReviewAllOrders() {
           </div>
         </header>
         <div>
-          <h2>Pending Orders</h2>
+          <h2>Approved Orders</h2>
           <div className="order-list">
-            {pendingOrders.map((orderId, index) => (
+            {ApprovedOrders.map((orderId, index) => (
               <div
                 key={orderId}
                 className='order-button'
@@ -148,15 +124,11 @@ function ReviewAllOrders() {
                         ))}
                     </tbody>
                 </table>
-               
+        
             </div>
-            <div className='btnContainer'>
-              <div className="buttonContainer">
-                <button className="removeBtn" onClick={handleDelPending}>Delete Order</button>
-                <button className="approveBtn" onClick={handleApproval}>Approve Order</button>
-              </div>
+            <div className="buttonContainer">   
+                <button className="removeBtn" onClick={handleDelApproved}>Delete Order</button>
             </div>
-
             <img src={imageSrc} alt="bodypic" style={{ width: '22%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
             <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
           </div>
@@ -165,4 +137,4 @@ function ReviewAllOrders() {
     );
   }
   
-  export default ReviewAllOrders;
+  export default ApprovedOrders;
