@@ -77,7 +77,7 @@ function TableComponent() {
     .then((snapshot) => {
       if (snapshot.exists()) {
         const emailValue = snapshot.val();
-
+        console.log(emailValue);
         AWS.config.update({ 
           region: 'us-west-1', 
           apiVersion: 'latest',
