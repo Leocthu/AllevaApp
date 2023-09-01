@@ -5,6 +5,8 @@ import './hamburgerMenu.css';
 import hamburger from './hamburger.svg';
 import { auth, database } from './firebase';
 import { ref, get } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
+
 
 function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +17,20 @@ function HamburgerMenu() {
   };
 
   const user = auth.currentUser;
+
+  const navigate = useNavigate();
+  const handleSignOut = () => {
+    // Sign the user out and then navigate to the sign-in page
+    auth.signOut()
+      .then(() => {
+        console.log('User signed out successfully');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('Error signing out:', error);
+      });
+  };
+
 
   useEffect(() => {
     if (!user) {
@@ -68,7 +84,7 @@ function HamburgerMenu() {
             {userRole === 'admin' && (
               <Link to="/ApprovedOrders">Approved Orders</Link>
             )}
-            <Link to="/">Sign Out</Link>
+            <button className="sign-out-button" onClick={handleSignOut}>Sign Out</button> 
         </li>
       </ul>
     </div>
