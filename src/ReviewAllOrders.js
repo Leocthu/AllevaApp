@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import allevamedicallogo from './allevamedicallogo.png';
-import { database, auth } from './firebase';
+import { database } from './firebase';
 import { ref, get, set, remove } from 'firebase/database';
 import HamburgerMenu from './hamburgerMenu';
 import './ReviewAllOrders.css';
-import imageSrc from './BodyReference.jpeg';
+import imageSrc from './BodyReference.jpg';
 import dicut from './dicut.jpg';
 
-import AWS from 'aws-sdk';
+
 
 function ReviewAllOrders() {
     const [pendingOrders, setPendingOrders] = useState([]);
@@ -78,102 +78,6 @@ function ReviewAllOrders() {
             
             // Refresh the pending orders list
             fetchPendingOrders();
-            const user = auth.currentUser;
-            if (!user){
-              console.log('User not authenticated');
-              return;
-            }
-            const userId = user.uid;
-            let compName = "";
-            let name = "";
-            const companyRef = await ref(database, `users/${userId}`);
-            get(companyRef)
-              .then((snapshot) => {
-                if (snapshot.exists()) {
-                  const userData = snapshot.val();
-                  compName = userData.Company; // Set CompanyName inside the scope
-                } else {
-                  console.log('User data not found.');
-                }
-              })
-              .catch((error) => {
-                console.error('Error retrieving company:', error);
-              });
-            
-            const nameRef =  await ref(database, `company/${compName}/${userId}/name`)
-            get(nameRef)
-              .then((snapshot) => {
-                if (snapshot.exists()) {
-                  const usersName = snapshot.val();
-                  name = usersName.name; // Set CompanyName inside the scope
-                } else {
-                  console.log('User data not found.');
-                }
-              })
-              .catch((error) => {
-                console.error('Error retrieving name:', error);
-              });  
-
-            
-            
-            const emailRef = ref(database, `company/${compName}/${userId}/username`);
-            get(emailRef)
-            .then((snapshot) => {
-              if (snapshot.exists()) {
-                const emailValue = snapshot.val();
-                console.log(emailValue);
-                AWS.config.update({ 
-                  region: 'us-west-1', 
-                  apiVersion: 'latest',
-                  credentials: {
-                    accessKeyId: 'AKIAQUDNAIK6QT3D4WN3',
-                    secretAccessKey: 'Ra8M1QAZzYs1ySj/uDRjW3VxvDiUPg4xyqJ+2k7a',
-                  }
-                }); // Replace 'your-region' with the appropriate AWS region
-            
-                // Create a new SES instance
-                const ses = new AWS.SES();
-        
-                const emailParams = {
-                  Destination: {
-                    ToAddresses: [emailValue], 
-                  },
-                  Message: {
-                    Body: {
-                      Text: {
-                        Data: `
-                          Hello ${name}, \n
-                          
-                          Order ${selectedOrderId} has been approved! If you have any questions or need to make any changes to the order, please contact us at ###-###-####. \n
-                          
-                          Best Regards, 
-                          Alleva Manufacturing
-                        `,
-                      },
-                    },
-                    Subject: {
-                      Data: 'Order Confirmation',
-                    },
-                  },
-                  Source: 'allevamanufacturing.eric@gmail.com', // Replace with your SES verified email address
-                };
-        
-                ses.sendEmail(emailParams, (err, data) => {
-                  if (err) {
-                    console.error('Error sending email:', err);
-                  } else {
-                    console.log('Email sent successfully:', data);
-                  }
-                });
-                // Now you can use the emailValue to send an email to the recipient
-                // using AWS SES or any other email service.
-              } else {
-                console.log('Email data not found.');
-              }
-            })
-            .catch((error) => {
-              console.error('Error fetching email data:', error);
-            });
           } catch (error) {
             console.error('Error approving order:', error);
           }

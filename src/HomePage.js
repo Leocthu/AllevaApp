@@ -3,7 +3,7 @@ import './HomePage.css';
 import $ from 'jquery';
 import 'datatables.net';
 import 'datatables.net-dt';
-import imageSrc from './BodyReference.jpeg';
+import imageSrc from './BodyReference.jpg';
 import allevamedicallogo from './allevamedicallogo.png';
 import dicut from './dicut.jpg';
 

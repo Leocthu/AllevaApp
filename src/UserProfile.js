@@ -4,7 +4,7 @@ import { database, auth } from './firebase';
 import { ref, get } from 'firebase/database';
 import HamburgerMenu from './hamburgerMenu';
 import './ReviewAllOrders.css';
-import imageSrc from './BodyReference.jpeg';
+import imageSrc from './BodyReference.jpg';
 import dicut from './dicut.jpg';
 
 function UserProfile() {

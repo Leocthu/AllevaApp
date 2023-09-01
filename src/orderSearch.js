@@ -6,7 +6,7 @@ import 'datatables.net-dt';
 import allevamedicallogo from './allevamedicallogo.png';
 import HamburgerMenu from './hamburgerMenu';
 import './orderSearch.css';
-import imageSrc from './BodyReference.jpeg';
+import imageSrc from './BodyReference.jpg';
 import dicut from './dicut.jpg';
 
 
