@@ -22,12 +22,48 @@ function TableComponent() {
   const [compName, setCompName] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  const handleFindComp = () => {
+    const user = auth.currentUser;
+    if (!user){
+      console.log('User not authenticated');
+      return;
+    }
+    const userId = user.uid;
+    const compRef = ref(database, `users/${userId}/Company`);
+    get(compRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setCompName(snapshot.val());
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching company name:', error);
+      });
+  }
+
+
 
   useEffect(() => {
     $(document).ready(function() {
       $('#myTable').DataTable();
     });
-  }, []);
+    handleFindComp();
+ 
+
+    const updateCurrentDate = () => {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const day = String(currentDate.getDate()).padStart(2, '0');
+  
+      const formattedDate = `${year}-${month}-${day}`;
+      setOrderDate(formattedDate);
+    };
+
+    updateCurrentDate();
+
+
+  }, [handleFindComp]);
 
   const [tableData, setTableData] = useState([
     { id: 1, name: 'Thigh Below Crotch Reference', userInput1: '', userInput2: ''},
@@ -40,6 +76,10 @@ function TableComponent() {
     { id: 8, name: 'Length of Leg from Heel to Crotch', userInput1: '', userInput2: ''},
     { id: 9, name: 'Length from Center of Kneecap to Heel', userInput1: '', userInput2: ''},
   ]);
+
+
+
+  
 
 
 
@@ -237,16 +277,7 @@ function TableComponent() {
           {showConfirmation && <h1>Confirmation Page</h1>}
           <div style={{ display: 'flex', marginBottom: '20px'}}>
           <div style={{ marginRight: '20px' }}>
-              <label className="company">Company:  </label>
-              {showConfirmation ? (
-                <span>{compName}</span> // Non-editable text when confirmed
-              ) : (
-                <input
-                  type="text"
-                  value={compName}
-                  onChange={(e) => setCompName(e.target.value)}
-                />
-              )}
+              <label className="company">Company: {compName} </label>
             </div>
             <div style={{ marginRight: '20px' }}>
               <label className="nurse">Username:  </label>
@@ -261,16 +292,7 @@ function TableComponent() {
               )}
             </div>
             <div style={{ marginRight: '20px' }}>
-              <label className="date">Date:  </label>
-              {showConfirmation ? (
-                <span>{orderDate}</span> // Non-editable text when confirmed
-              ) : (
-                <input
-                  type="date"
-                  value={orderDate}
-                  onChange={(e) => setOrderDate(e.target.value)}
-                />
-              )}
+              <label className="date">Date: {orderDate} </label>
             </div> 
           </div>
           
