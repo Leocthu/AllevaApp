@@ -1,0 +1,63 @@
+/* Add this CSS in a separate CSS file or a <style> tag in your component */
+.order-button {
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 300px;
+}
+
+.order-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between items */
+    margin-left: 73px;
+}
+  
+  
+.order-button:hover {
+background-color: #e0e0e0;
+}
+
+/* Add this CSS in a separate CSS file or a <style> tag in your component */
+/* Add this CSS in a separate CSS file or a <style> tag in your component */
+.order-table {
+    border-collapse: collapse;
+    width: 75%;
+    border: 2px solid #ddd; /* Outline style */
+    margin-right: 30px;
+}
+  
+.order-table th,
+.order-table td {
+    border: 1px solid #ddd; /* Cell border style */
+    padding: 8px;
+    text-align: left;
+}
+  
+.order-table th {
+    background-color: #f2f2f2;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+  
+.buttonContainer button {
+    padding: 10px 20px; /* Adjust padding as needed */
+    font-size: 14px; /* Adjust font size as needed */
+    margin: 0 10px;
+}
+  
+.btnContainer {
+    text-align: center; /* Center the buttons */
+}
+  
+
+
+  

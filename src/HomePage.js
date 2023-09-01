@@ -7,7 +7,7 @@ import imageSrc from './BodyReference.jpeg';
 import allevamedicallogo from './allevamedicallogo.png';
 import dicut from './dicut.jpg';
 
-import { ref, push, get } from 'firebase/database';
+import { ref, push, get, set } from 'firebase/database';
 import { auth, database } from './firebase';
 import HamburgerMenu from './hamburgerMenu';
 
@@ -77,7 +77,7 @@ function TableComponent() {
     .then((snapshot) => {
       if (snapshot.exists()) {
         const emailValue = snapshot.val();
-
+        console.log(emailValue);
         AWS.config.update({ 
           region: 'us-west-1', 
           apiVersion: 'latest',
@@ -158,6 +158,7 @@ function TableComponent() {
     }
     // Get a reference to the 'orders' node in the Firebase Realtime Database
     const ordersRef = ref(database, `company/${compName}/${userId}/Orders/${uniqId}`);
+    const adminRef = ref(database, `admin/Pending Orders/${uniqId}`);
 
     // Prepare the data to be saved
     const ordersData = tableData.map((row) => ({
@@ -166,7 +167,13 @@ function TableComponent() {
       userInput2: row.userInput2,
     }));
 
-
+    set(adminRef, ordersData)
+      .then(() => {
+        console.log('Pending Order Approval');
+      })
+      .catch((error) => {
+        console.error('order is not pending');
+      })
 
     
     // Push the data to the 'orders' node in the database
