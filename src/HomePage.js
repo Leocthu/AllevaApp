@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import './HomePage.css';
 import $ from 'jquery';
 import 'datatables.net';
@@ -22,9 +22,9 @@ function TableComponent() {
   const [compName, setCompName] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const handleFindComp = () => {
+  const handleFindComp = useCallback(() => {
     const user = auth.currentUser;
-    if (!user){
+    if (!user) {
       console.log('User not authenticated');
       return;
     }
@@ -39,8 +39,7 @@ function TableComponent() {
       .catch((error) => {
         console.error('Error fetching company name:', error);
       });
-  }
-
+  }, []);
 
 
   useEffect(() => {
@@ -110,6 +109,81 @@ function TableComponent() {
     const userId = user.uid;
     let temp = 1;
 
+    const sendOrderConfirmationEmail = (recipientEmail) => {
+      const ses = new AWS.SES();
+      // Logic for order confirmation email
+      const emailParams = {
+        Destination: {
+          ToAddresses: [recipientEmail],
+        },
+        Message: {
+          Body: {
+            Text: {
+              Data: `Hello ${nurseName}, 
+                
+      Thank you for placing your order! Your order has been confirmed and is currently pending approval. If you have any questions or need to make any changes to the order, please contact us at ###-###-####. \n
+                
+      Order Details: 
+      Order Number: ${uniqId} 
+                
+      Best Regards, 
+      Alleva Manufacturing
+              `,
+            },
+          },
+          Subject: {
+            Data: 'Order Confirmation',
+          },
+        },
+        Source: 'allevamanufacturing.eric@gmail.com',
+      };
+  
+      ses.sendEmail(emailParams, (err, data) => {
+        if (err) {
+          console.error('Error sending order confirmation email:', err);
+        } else {
+          console.log('Order confirmation email sent successfully:', data);
+        }
+      });
+    };
+  
+
+    const sendNotificationEmail = (recipientEmail) => {
+      // Logic for notification email (completely separate content)
+      const ses = new AWS.SES();
+      const notificationEmailParams = {
+        Destination: {
+          ToAddresses: [recipientEmail],
+        },
+        Message: {
+          Body: {
+            Text: {
+              Data: `Hello, \n
+    This is a notification that ${nurseName} has placed an order. \n
+    Order Details: 
+    Order Number: ${uniqId}  \n
+    Regards, 
+    Alleva Manufacturing
+              `,
+            },
+          },
+          Subject: {
+            Data: 'Order Notification',
+          },
+        },
+        Source: 'allevamanufacturing.eric@gmail.com',
+      };
+  
+      ses.sendEmail(notificationEmailParams, (err, data) => {
+        if (err) {
+          console.error('Error sending notification email:', err);
+        } else {
+          console.log('Notification email sent successfully:', data);
+        }
+      });
+    };
+  
+
    
 
     const emailRef = ref(database, `company/${compName}/${userId}/username`);
@@ -128,44 +202,12 @@ function TableComponent() {
         }); // Replace 'your-region' with the appropriate AWS region
     
         // Create a new SES instance
-        const ses = new AWS.SES();
+        
+        sendOrderConfirmationEmail(emailValue);
+        const allevaMed = 'lch001@ucsd.edu';
+        sendNotificationEmail(allevaMed);
 
-        const emailParams = {
-          Destination: {
-            ToAddresses: [emailValue], 
-          },
-          Message: {
-            Body: {
-              Text: {
-                Data: `
-                  Hello ${nurseName}, \n
-                  
-                  Thank you for placing your order! Your order has been confirmed and is currently pending approval. If you have any questions or need to make any changes to the order, please contact us at ###-###-####. \n
-                  
-                  Order Details: 
-                  Order Number: ${uniqId} \n
-                  
-                  Best Regards, 
-                  Alleva Manufacturing
-                `,
-              },
-            },
-            Subject: {
-              Data: 'Order Confirmation',
-            },
-          },
-          Source: 'allevamanufacturing.eric@gmail.com', // Replace with your SES verified email address
-        };
 
-        ses.sendEmail(emailParams, (err, data) => {
-          if (err) {
-            console.error('Error sending email:', err);
-          } else {
-            console.log('Email sent successfully:', data);
-          }
-        });
-        // Now you can use the emailValue to send an email to the recipient
-        // using AWS SES or any other email service.
       } else {
         console.log('Email data not found.');
       }
