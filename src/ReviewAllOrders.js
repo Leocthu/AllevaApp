@@ -119,7 +119,7 @@ function ReviewAllOrders() {
           console.error('Error fetching company name:', error);
         });
 
-    }, []);
+    }, [company]);
 
 
 
@@ -151,7 +151,7 @@ function ReviewAllOrders() {
             Data: 'Approved Order Notification',
           },
         },
-        Source: 'allevamanufacturing.eric@gmail.com',
+        Source: 'leocthu@gmail.com',
       };
   
       ses.sendEmail(notificationEmailParams, (err, data) => {
@@ -191,7 +191,10 @@ function ReviewAllOrders() {
               }
             });
 
-            sendApprovedEmail('leocthu@gmail.com');
+            sendApprovedEmail('allevamanufacturing.eric@gmail.com');
+            //when it comes to having Airos send the email to alleva medical, i just need to verify their identity in aws ses
+
+
           } catch (error) {
             console.error('Error approving order:', error);
           }
