@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import allevamedicallogo from './allevamedicallogo.png';
-import { database } from './firebase';
+import { auth, database } from './firebase';
 import { ref, get, set, remove } from 'firebase/database';
 import HamburgerMenu from './hamburgerMenu';
 import './ReviewAllOrders.css';
 import imageSrc from './BodyReference.jpg';
 import dicut from './dicut.jpg';
+
+import AWS from 'aws-sdk';
 
 
 
@@ -60,6 +62,107 @@ function ReviewAllOrders() {
       }
     };
 
+    const [name, setName] = useState('');
+    const [company, setCompany] = useState('');
+    const [phoneNum, setPhoneNum] = useState('');
+    const [email, setEmail] = useState('');
+
+    const handleFindUserData = useCallback(() => {
+      const user = auth.currentUser;
+      if (!user) {
+        console.log('User not authenticated');
+        return;
+      }
+      const userId = user.uid;
+      const compRef = ref(database, `users/${userId}/Company`);
+      const nameRef = ref(database, `company/${company}/${userId}/name`);
+      const phoneRef = ref(database, `company/${company}/${userId}/mobile`);
+      const emailRef = ref(database, `company/${company}/${userId}/username`)
+
+      get(compRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setCompany(snapshot.val());
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching company name:', error);
+        });
+      
+      get(nameRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setName(snapshot.val());
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching company name:', error);
+        });
+        
+      get(phoneRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setPhoneNum(snapshot.val());
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching company name:', error);
+        });
+
+      get(emailRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            setEmail(snapshot.val());
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching company name:', error);
+        });
+
+    }, []);
+
+
+
+
+    const sendApprovedEmail = (recipientEmail) => {
+      // Logic for notification email (completely separate content)
+      handleFindUserData();
+      const ses = new AWS.SES();
+      const notificationEmailParams = {
+        Destination: {
+          ToAddresses: [recipientEmail],
+        },
+        Message: {
+          Body: {
+            Text: {
+              Data: `Hello, \n
+    This is a notification that Airos has approved an order. \n
+    Order Number: ${selectedOrderId}  \n
+    Name: ${name}
+    Email: ${email}
+    Phone Number: ${phoneNum}
+
+    Regards, 
+    Alleva Manufacturing
+              `,
+            },
+          },
+          Subject: {
+            Data: 'Approved Order Notification',
+          },
+        },
+        Source: 'allevamanufacturing.eric@gmail.com',
+      };
+  
+      ses.sendEmail(notificationEmailParams, (err, data) => {
+        if (err) {
+          console.error('Error sending notification email:', err);
+        } else {
+          console.log('Notification email sent successfully:', data);
+        }
+      });
+    };
+
     const handleApproval = async () => {
         if (selectedOrder) {
           try {
@@ -78,6 +181,17 @@ function ReviewAllOrders() {
             
             // Refresh the pending orders list
             fetchPendingOrders();
+
+            AWS.config.update({ 
+              region: 'us-west-1', 
+              apiVersion: 'latest',
+              credentials: {
+                accessKeyId: 'AKIAQUDNAIK6QT3D4WN3',
+                secretAccessKey: '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',
+              }
+            });
+
+            sendApprovedEmail('leocthu@gmail.com');
           } catch (error) {
             console.error('Error approving order:', error);
           }
