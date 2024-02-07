@@ -7,6 +7,8 @@ import './ReviewAllOrders.css';
 import imageSrc from './BodyReference.jpg';
 import dicut from './dicut.jpg';
 
+import AWS from 'aws-sdk';
+
 function ApprovedOrders() {
     const [ApprovedOrders, setApprovedOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -58,9 +60,54 @@ function ApprovedOrders() {
       }
     };
 
+    const sendOrderCompleted = (recipientEmail) => {
+      // Logic for notification email (completely separate content)
+      const ses = new AWS.SES();
+      const notificationEmailParams = {
+        Destination: {
+          ToAddresses: [recipientEmail],
+        },
+        Message: {
+          Body: {
+            Text: {
+              Data: `Hello, \n
+    Order number ${selectedOrderId} has been successfully completed and will now be archived. Please contact Alleva Medical if there are any issues regarding this order. 
+
+    Regards, 
+    Alleva Manufacturing
+              `,
+            },
+          },
+          Subject: {
+            Data: 'Order Completed',
+          },
+        },
+        Source: 'leocthu@gmail.com',
+      };
+  
+      ses.sendEmail(notificationEmailParams, (err, data) => {
+        if (err) {
+          console.error('Error sending notification email:', err);
+        } else {
+          console.log('Notification email sent successfully:', data);
+        }
+      });
+    };
+
     const handleDelApproved = async () => {
         if (selectedOrder) {
           try {
+
+            AWS.config.update({ 
+              region: 'us-west-1', 
+              apiVersion: 'latest',
+              credentials: {
+                accessKeyId: 'AKIAQUDNAIK6QT3D4WN3',
+                secretAccessKey: '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',
+              }
+            });
+
+            sendOrderCompleted('allevamanufacturing.eric@gmail.com');
   
             // Delete the selected order from the pending orders node
             await remove(ref(database, `admin/Approved Orders/${selectedOrderId}`));
@@ -127,7 +174,7 @@ function ApprovedOrders() {
         
             </div>
             <div className="buttonContainer">   
-                <button className="removeBtn" onClick={handleDelApproved}>Delete Order</button>
+                <button className="removeBtn" onClick={handleDelApproved}>Order Completed</button>
             </div>
             <img src={imageSrc} alt="bodypic" style={{ width: '22%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
             <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
