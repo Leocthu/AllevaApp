@@ -60,6 +60,7 @@ function AdminSignUp() {
               const databaseRef = ref(database, 'users/' + user.uid);
               const data = {
                 Company: CompanyName,
+                Chain: 'Alleva'
               };
 
               // Write data to the database
@@ -101,6 +102,7 @@ function AdminSignUp() {
               const databaseRef = ref(database, 'users/' + user.uid);
               const data = {
                 Company: CompanyName,
+                Chain: 'Alleva'
               };
 
               // Write data to the database

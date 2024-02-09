@@ -96,6 +96,7 @@ function UserSignUp() {
         console.log('Chain already exists:', chainName);
       }
     }
+  
     
 
     const companyRef = ref(database, 'company/' + selectedCompany);
@@ -112,7 +113,16 @@ function UserSignUp() {
 
 
               writeUserData(user.uid, selectedCompany, chainName, firstName, email, mobile, 'client');
-
+              const users = auth.currentUser;
+              const userRef = ref(database, `users/${users.uid}`); // Corrected path with a forward slash
+              set(userRef, {
+                chain: selectedChain,
+                company: selectedCompany
+              }).then(() => {
+                console.log('User data updated successfully.');
+              }).catch((error) => {
+                console.error('Error updating user data:', error);
+              });
               navigate('/HomePage');
             })
             .catch((error) => {

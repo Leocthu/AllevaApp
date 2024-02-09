@@ -21,6 +21,7 @@ function TableComponent() {
   const [orderDate, setOrderDate] = useState('');
   const [compName, setCompName] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [chainName, setChainName] = useState('');
 
   const handleFindComp = useCallback(() => {
     const user = auth.currentUser;
@@ -29,7 +30,7 @@ function TableComponent() {
       return;
     }
     const userId = user.uid;
-    const compRef = ref(database, `users/${userId}/Company`);
+    const compRef = ref(database, `users/${userId}/company`);
     get(compRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -39,6 +40,13 @@ function TableComponent() {
       .catch((error) => {
         console.error('Error fetching company name:', error);
       });
+    const chainRef = ref(database, `users/${userId}/chain`);
+    get(chainRef)
+      .then((snapshot) => {
+        if(snapshot.exists()){
+          setChainName(snapshot.val());
+        }
+      })
   }, []);
 
 
@@ -105,7 +113,7 @@ function TableComponent() {
       console.log('User not authenticated');
       return;
     }
-    const uniqId = `${compName}-${nurseName}-${orderDate}`;
+    const uniqId = `${chainName}-${nurseName}-${orderDate}`;
     const userId = user.uid;
     let temp = 1;
 
@@ -186,7 +194,7 @@ function TableComponent() {
 
    
 
-    const emailRef = ref(database, `company/${compName}/${userId}/username`);
+    const emailRef = ref(database, `company/${compName}/chains/${chainName}/${userId}/username`);
     get(emailRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
@@ -239,7 +247,7 @@ function TableComponent() {
       return;
     }
     // Get a reference to the 'orders' node in the Firebase Realtime Database
-    const ordersRef = ref(database, `company/${compName}/${userId}/Orders/${uniqId}`);
+    const ordersRef = ref(database, `company/${compName}/chains/${chainName}/${userId}/Orders/${uniqId}`);
     const adminRef = ref(database, `admin/Pending Orders/${uniqId}`);
 
     // Prepare the data to be saved
@@ -319,10 +327,10 @@ function TableComponent() {
           {showConfirmation && <h1>Confirmation Page</h1>}
           <div style={{ display: 'flex', marginBottom: '20px'}}>
           <div style={{ marginRight: '20px' }}>
-              <label className="company">Company: {compName} </label>
+              <label className="company">Company: {chainName} </label>
             </div>
             <div style={{ marginRight: '20px' }}>
-              <label className="nurse">Username:  </label>
+              <label className="nurse">Name:  </label>
               {showConfirmation ? (
                 <span>{nurseName}</span> // Non-editable text when confirmed
               ) : (
