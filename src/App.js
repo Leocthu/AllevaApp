@@ -9,6 +9,7 @@ import OrderSearch from './orderSearch';
 import ReviewAllOrders from './ReviewAllOrders';
 import ApprovedOrders from './ApprovedOrders';
 import UserProfile from './UserProfile';
+import AdminSignUp from './AdminSignUp';
 
 
 
@@ -50,6 +51,7 @@ function App() {
           <Route path="/ReviewAllOrders" element={<ReviewAllOrders />} />
           <Route path="/ApprovedOrders" element={<ApprovedOrders />} />
           <Route path="/UserProfile" element={<UserProfile />} />
+          <Route path="/AdminSignUp" element={<AdminSignUp />} />
         </Routes>
       </div>
     </Router>

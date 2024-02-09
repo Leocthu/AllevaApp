@@ -53,3 +53,17 @@
   text-decoration: underline;
 }
 
+.company-dropdown {
+  width: 73.5%; /* Adjust width to match other input fields */
+  margin-bottom: 10px;
+  padding: 8px;
+  margin-left: 76px; 
+  
+
+  background-color: white;
+  color: rgba(0, 0, 0, 0.796);
+}
+
+.company-dropdown:hover {
+  background-color: lightgrey;
+}
