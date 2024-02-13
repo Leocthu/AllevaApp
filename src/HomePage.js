@@ -30,7 +30,7 @@
         return;
       }
       const userId = user.uid;
-      const compRef = ref(database, `users/${userId}/company`);
+      const compRef = ref(database, `users/${userId}/Company`);
       get(compRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
@@ -40,7 +40,7 @@
         .catch((error) => {
           console.error('Error fetching company name:', error);
         });
-      const chainRef = ref(database, `users/${userId}/chain`);
+      const chainRef = ref(database, `users/${userId}/Chain`);
       get(chainRef)
         .then((snapshot) => {
           if(snapshot.exists()){
@@ -116,30 +116,26 @@
 
     
       const userId = user.uid;
-      let temp = 1;
       let uniqId = '';
       let orderNum = 0;
 
       try {
         const orderNumRef = ref(database, `company/${compName}/chains/${chainName}/orderNum`);
         const orderNumSnapshot = await get(orderNumRef); // Await the result of get()
-        orderNum = orderNumSnapshot.val();
-        
-
+      
         if (orderNumSnapshot.exists()) {
           orderNum = orderNumSnapshot.val() + 1; // Increment order number
+        } else {
+          orderNum = 1; // Initialize order number to 1 if it doesn't exist
         }
-      
+        
         uniqId = `${chainName}-${nurseName}-${orderNum}`;
         console.log("Unique ID:", uniqId);
-
-        await set(orderNumRef, orderNum);
-      
+        
         // Now you can use the uniqId as needed, such as sending it in an email or storing it in the database
       } catch (error) {
         console.error('Error getting order number:', error);
       }
-
 
       const sendOrderConfirmationEmail = (recipientEmail) => {
         const ses = new AWS.SES();
@@ -251,24 +247,7 @@
     
 
 
-      const userRef = ref(database, 'users/' + userId);
-      console.log(userRef.toString());
-      get(userRef)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            const userData = snapshot.val();
-            const CompanyName = userData.Company; // Set CompanyName inside the scope
-            if (compName !== CompanyName){
-              console.error('Company Name Does Not Match');
-              temp = 0;
-            }
-          } else {
-            console.log('User data not found.');
-          }
-      });
-      if (temp === 0){
-        return;
-      }
+
       // Get a reference to the 'orders' node in the Firebase Realtime Database
       const ordersRef = ref(database, `company/${compName}/chains/${chainName}/${userId}/Orders/${uniqId}`);
       const adminRef = ref(database, `admin/Pending Orders/${uniqId}`);

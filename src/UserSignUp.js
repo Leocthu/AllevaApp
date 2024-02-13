@@ -97,9 +97,7 @@ function UserSignUp() {
       }
     }
 
-    const orderNumRef = ref(database, `company/${selectedCompany}/orderNum`);
-    let orderStart = 0;
-    set(orderNumRef, orderStart);
+    
 
   
     
@@ -121,8 +119,8 @@ function UserSignUp() {
               const users = auth.currentUser;
               const userRef = ref(database, `users/${users.uid}`); // Corrected path with a forward slash
               set(userRef, {
-                chain: selectedChain,
-                company: selectedCompany
+                Chain: selectedChain,
+                Company: selectedCompany
               }).then(() => {
                 console.log('User data updated successfully.');
               }).catch((error) => {

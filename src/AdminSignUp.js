@@ -12,6 +12,7 @@ function writeUserData(userId, CompanyName, name, email, mobile, role){
     username: email,
     mobile: mobile,
     company: CompanyName,
+    chain: CompanyName,
     role: role
   });
 }
@@ -22,6 +23,7 @@ function AdminSignUp() {
   const [firstName, setFirstName] = useState(''); // Add state for first name
   const [CompanyName, setCompany] = useState(''); // Add state for company
   const [mobile, setMobile] = useState(''); // Add state for mobile phone number
+
 
   const navigate = useNavigate();
 
@@ -102,7 +104,7 @@ function AdminSignUp() {
               const databaseRef = ref(database, 'users/' + user.uid);
               const data = {
                 Company: CompanyName,
-                Chain: 'Alleva'
+                Chain: CompanyName
               };
 
               // Write data to the database

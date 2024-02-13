@@ -40,8 +40,8 @@ function UserProfile() {
   
       if (userSnapshot.exists()) {
         const userData = userSnapshot.val();
-        companyName = userData.company;
-        chainName = userData.chain; // Assuming chain info is stored in the user data
+        companyName = userData.Company;
+        chainName = userData.Chain; // Assuming chain info is stored in the user data
         console.log("Company Name:", companyName);
         console.log("Chain Name:", chainName);
   

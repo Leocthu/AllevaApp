@@ -33,8 +33,8 @@ function OrderSearch() {
                 .then((snapshot) => {
                   if (snapshot.exists()) {
                     const userData = snapshot.val();
-                    CompanyName = userData.company; // Set CompanyName inside the scope
-                    chainName = userData.chain;
+                    CompanyName = userData.Company; // Set CompanyName inside the scope
+                    chainName = userData.Chain;
 
                   } else {
                     console.log('User data not found.');
