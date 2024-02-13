@@ -36,7 +36,7 @@ function UserSignUp() {
   const [companyList, setCompanyList] = useState([]);
   const [chainList, setChainList] = useState([]);
   const [showAddChainInput, setShowAddChainInput] = useState(false); // State to control the input box visibility
-  const [showAddCompanyInput, setShowAddCompanyInput] = useState(false); // State to control the company input box visibility
+
 
   const navigate = useNavigate();
 
@@ -148,10 +148,6 @@ function UserSignUp() {
     setShowAddChainInput(true);
   };
 
-  const handleAddNewCompany = () => {
-    setShowAddCompanyInput(true);
-  };
-
   return (
     <div className="SignUp-container">
       <header className="SignUp-header">
@@ -166,17 +162,9 @@ function UserSignUp() {
           onChange={(e) => setFirstName(e.target.value)}
         />
         <select
-          value={showAddCompanyInput ? '__add__' : selectedCompany}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value === '__add__') {
-              handleAddNewCompany();
-            } else {
-              setSelectedCompany(value);
-            }
-          }}
+          value={selectedCompany}
+          onChange={(e) => setSelectedCompany(e.target.value)}
           className="company-dropdown"
-          style={{ display: showAddCompanyInput ? 'none' : 'block' }}
         >
           <option value="">Select Company</option>
           {companyList.map((company) => (
@@ -184,16 +172,7 @@ function UserSignUp() {
               {company}
             </option>
           ))}
-          
         </select>
-        {showAddCompanyInput && (
-          <input
-            type="text"
-            placeholder="Enter New Company Name"
-            value={selectedCompany}
-            onChange={(e) => setSelectedCompany(e.target.value)}
-          />
-        )}
         <select
           value={showAddChainInput ? '__add__' : selectedChain}
           onChange={(e) => {
