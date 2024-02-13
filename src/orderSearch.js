@@ -21,6 +21,7 @@ function OrderSearch() {
         const user = auth.currentUser;
         const userId = user.uid;
         let CompanyName = "";
+        let chainName = "";
         
         try {
             if (userId && searchQuery) {
@@ -32,13 +33,15 @@ function OrderSearch() {
                 .then((snapshot) => {
                   if (snapshot.exists()) {
                     const userData = snapshot.val();
-                    CompanyName = userData.Company; // Set CompanyName inside the scope
+                    CompanyName = userData.company; // Set CompanyName inside the scope
+                    chainName = userData.chain;
+
                   } else {
                     console.log('User data not found.');
                   }
         
                   // Continue with the rest of the logic
-                  const orderRef = ref(database, `company/${CompanyName}/${userId}/Orders/${searchQuery}`);
+                  const orderRef = ref(database, `company/${CompanyName}/chains/${chainName}/${userId}/Orders/${searchQuery}`);
                   console.log(orderRef.toString());
                   get(orderRef)
                     .then(orderSnapshot => {

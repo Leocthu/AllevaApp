@@ -47,8 +47,9 @@ function HamburgerMenu() {
       .then((snapshot) => {
         if (snapshot.exists()) {
           const userData = snapshot.val();
-          const CompanyName = userData.Company;
-          const roleRef = ref(database, `company/${CompanyName}/${userId}/role`);
+          const CompanyName = userData.company;
+          const chainName = userData.chain;
+          const roleRef = ref(database, `company/${CompanyName}/chains/${chainName}/${userId}/role`);
           console.log(roleRef.toString());
           get(roleRef)
             .then((roleSnapshot) => {

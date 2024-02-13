@@ -96,6 +96,11 @@ function UserSignUp() {
         console.log('Chain already exists:', chainName);
       }
     }
+
+    const orderNumRef = ref(database, `company/${selectedCompany}/orderNum`);
+    let orderStart = 0;
+    set(orderNumRef, orderStart);
+
   
     
 
@@ -181,7 +186,7 @@ function UserSignUp() {
               {company}
             </option>
           ))}
-          <option value="__add__">Add New Company</option>
+          
         </select>
         {showAddCompanyInput && (
           <input
