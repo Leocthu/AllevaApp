@@ -14,6 +14,7 @@ function UserProfile() {
   const [userOrders, setUserOrders] = useState([]);
   const [selectedOrderId, setSelectedOrderId] = useState(null); // Store selected order ID
 
+
   useEffect(() => {
     fetchPendingOrders();
     fetchApprovedOrders();
@@ -25,23 +26,31 @@ function UserProfile() {
   const fetchUserOrders = async () => {
     try {
       const user = auth.currentUser;
+      if (!user) {
+        console.log("No user is currently logged in.");
+        return;
+      }
       const userId = user.uid;
-      let companyName = "";
-
-      const userRef = ref(database, `users/${userId}`); // Assuming your user data is stored in 'users' node
+  
+      const userRef = ref(database, `users/${userId}`);
       const userSnapshot = await get(userRef);
-
+  
+      let companyName = "";
+      let chainName = "";
+  
       if (userSnapshot.exists()) {
         const userData = userSnapshot.val();
-        companyName = userData.Company; // Set CompanyName inside the scope
-        console.log(companyName);
-        console.log(userId);
-        const userOrdersRef = ref(database, `company/${companyName}/${userId}/Orders`);
+        companyName = userData.company;
+        chainName = userData.chain; // Assuming chain info is stored in the user data
+        console.log("Company Name:", companyName);
+        console.log("Chain Name:", chainName);
+  
+        const userOrdersRef = ref(database, `company/${companyName}/chains/${chainName}/${userId}/Orders`);
         const userOrdersSnapshot = await get(userOrdersRef);
         const userOrdersData = userOrdersSnapshot.val();
-
+  
         if (userOrdersData) {
-          console.log(userOrdersData);
+          console.log("User Orders:", userOrdersData);
           setUserOrders(userOrdersData);
         } else {
           setUserOrders([]);
@@ -53,6 +62,7 @@ function UserProfile() {
       console.error('Error fetching user orders:', error);
     }
   };
+  
 
   const fetchPendingOrders = async () => {
     try {
@@ -69,6 +79,7 @@ function UserProfile() {
         });
         console.log(sortedOrderIds);
         setPendingOrders(sortedOrderIds);
+      
       } else {
         setPendingOrders([]);
       }
@@ -127,6 +138,9 @@ function UserProfile() {
   for (const orderId of pendingOrders) {
     if (userOrders.hasOwnProperty(orderId)) {
       matchingPendingOrders.push(orderId);
+    }
+    else {
+      console.log('no matching orders');
     }
   }
 
