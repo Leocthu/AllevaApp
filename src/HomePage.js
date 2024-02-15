@@ -324,9 +324,9 @@
           
           
         </header>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'light grey'}}>
-          <div id="tableContainer" style={{ marginTop: '100px', marginRight: '70px', paddingRight: '50px', paddingTop: '70px'}}>
-            {showConfirmation && <h1>Confirmation Page</h1>}
+        <div style={{ display: 'flex', alignItems: 'flex-start', backgroundColor: 'light grey'}}>
+          <div id="tableContainer" style={{ width: '55%', marginLeft: '3%',marginRight: '0px', marginTop: '75px', paddingRight: '20px', paddingTop: '70px'}}>
+            {showConfirmation && <h1>Confirmation</h1>}
             <div style={{ display: 'flex', marginBottom: '20px'}}>
             <div style={{ marginRight: '20px' }}>
                 <label className="company">Company: {chainName} </label>
@@ -424,11 +424,11 @@
           </div>
           {showConfirmation ? (
             <div style={{ marginBottom: '250px' }}>
-              <img src={dicut} alt="dicutpic" style={{ width: '110%', height: 'auto', paddingTop: '40px', marginRight: '75px'}} />
+              <img src={dicut} alt="dicutpic" style={{ width: '140%', height: 'auto', paddingTop: '40px', marginRight: '25%'}} />
             </div>
           ) : (
             <div style={{ marginBottom: '250px' }}>
-              <img src={imageSrc} alt="bodypic" style={{ width: '130%', height: 'auto', paddingTop: '40px', marginRight: '75px'}} />
+              <img src={imageSrc} alt="bodypic" style={{ width: '97%', height: 'auto', paddingTop: '40px', marginRight: '75px', marginLeft: '10px'}} />
             </div>
           )}
           

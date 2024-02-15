@@ -12,9 +12,9 @@
   border-style: groove;
   border-width: 10px;
   background-color: #d4ebf2;
-  width: 30%;
-  height: 40%;
-  padding-top: 50px;
+  width: 35%;
+  height: 42%;
+  padding-top: 4%;
   border-radius: 30px;   
 }
   
@@ -42,7 +42,7 @@
   border-radius: 30px;   
   border: none;
   margin: 0 auto;
-  margin-bottom: 50px;
+  margin-bottom: 5%;
   margin-top: 20px;
 }
 
@@ -55,6 +55,7 @@
   border: none;
   color: rgb(1, 39, 116);
   background-color: #d4ebf2;
+
 }
 
 .signup-btn:hover{
@@ -72,7 +73,8 @@
 .signup-cont {
   display: flex;
   justify-content: center;
-  margin-top: 5px;
+
+
 }
 
 .signup-cont h4{
