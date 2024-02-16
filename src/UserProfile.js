@@ -6,6 +6,9 @@ import HamburgerMenu from './hamburgerMenu';
 import './ReviewAllOrders.css';
 import imageSrc from './BodyReference.jpg';
 import dicut from './dicut.jpg';
+import { Link } from 'react-router-dom';
+import './UserProfile.css';
+
 
 function UserProfile() {
   const [pendingOrders, setPendingOrders] = useState([]);
@@ -160,6 +163,12 @@ function UserProfile() {
             <HamburgerMenu />
           </div>
       </header>
+
+      <div className="place-order-container">
+        <Link to="/HomePage" className="place-order-link">Place an Order Here</Link>
+      </div>
+
+
 
       <div>
         <h2>Current Pending Orders</h2>

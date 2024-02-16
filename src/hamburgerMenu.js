@@ -1,4 +1,3 @@
-// HamburgerMenu.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './hamburgerMenu.css';
@@ -7,9 +6,8 @@ import { auth, database } from './firebase';
 import { ref, get } from 'firebase/database';
 import { useNavigate } from 'react-router-dom';
 
-
 function HamburgerMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true); // Initially set to true to keep the menu open
   const [userRole, setUserRole] = useState('');
 
   const toggleMenu = () => {
@@ -30,7 +28,6 @@ function HamburgerMenu() {
         console.error('Error signing out:', error);
       });
   };
-
 
   useEffect(() => {
     if (!user) {
@@ -76,9 +73,9 @@ function HamburgerMenu() {
       </div>
       <ul className="menu-links">
         <li className="a">
-            <Link to="/UserProfile">Profile</Link>
+            <Link to="/UserProfile">Order Status</Link>
             <Link to="/HomePage">Order Page</Link>
-            <Link to="/orderSearch">Search Order</Link>
+            <Link to="/orderSearch">Order Search</Link>
             {userRole === 'admin' && (
               <Link to="/ReviewAllOrders">Pending Orders</Link>
             )}

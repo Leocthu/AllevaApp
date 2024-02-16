@@ -41,6 +41,7 @@
     align-items: center;
     justify-content: center;
     font-size: 15px;
+    visibility: visible;
 }
 
 .menu-links a:hover {
@@ -51,13 +52,13 @@
 .hamburger-menu.open .menu-links {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    
 }
   
 .menu-links.open {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+ 
 }
   
   

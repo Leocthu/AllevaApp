@@ -1,0 +1,18 @@
+.place-order-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  
+  .place-order-link {
+    border: 1px solid black;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+    background-color: rgb(141, 211, 234);
+  }
+  
+  .place-order-link:hover {
+    background-color: rgb(88, 151, 172);
+  }

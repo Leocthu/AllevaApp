@@ -6,6 +6,7 @@
   import imageSrc from './BodyReference.jpg';
   import allevamedicallogo from './allevamedicallogo.png';
   import dicut from './dicut.jpg';
+  import { Link } from 'react-router-dom';
 
   import { ref, push, get, set } from 'firebase/database';
   import { auth, database } from './firebase';
@@ -22,6 +23,10 @@
     const [compName, setCompName] = useState('');
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [chainName, setChainName] = useState('');
+
+
+
+
 
     const handleFindComp = useCallback(() => {
       const user = auth.currentUser;
@@ -73,7 +78,7 @@
     }, [handleFindComp]);
 
     const [tableData, setTableData] = useState([
-      { id: 1, name: 'Thigh Below Crotch Reference', userInput1: '', userInput2: ''},
+      { id: 1, name: 'Thigh Below Crotch Circumference', userInput1: '', userInput2: ''},
       { id: 2, name: 'Mid Thigh Circumference', userInput1: '', userInput2: ''},
       { id: 3, name: 'Kneecap Circumference', userInput1: '', userInput2: ''},
       { id: 4, name: 'Mid Calf Circumference', userInput1: '', userInput2: ''},
@@ -82,6 +87,12 @@
       { id: 7, name: 'Length of Foot', userInput1: '', userInput2: ''},
       { id: 8, name: 'Length of Leg from Heel to Crotch', userInput1: '', userInput2: ''},
       { id: 9, name: 'Length from Center of Kneecap to Heel', userInput1: '', userInput2: ''},
+      { id: 10, name: 'Upper Abdomen Length to Crotch', userInput1: '', userInput2: ''},
+      { id: 11, name: 'Rib Circumference', userInput1: '', userInput2: ''},
+      { id: 12, name:  'Belly Circumference', userInput1: '', userInput2: ''},
+      { id: 13, name:  'Waist Circumference', userInput1: '', userInput2: ''},
+      { id: 14, name:  'Hip Circumference', userInput1: '', userInput2: ''},
+
     ]);
 
 
@@ -325,7 +336,35 @@
           
         </header>
         <div style={{ display: 'flex', alignItems: 'flex-start', backgroundColor: 'light grey'}}>
-          <div id="tableContainer" style={{ width: '55%', marginLeft: '3%',marginRight: '0px', marginTop: '75px', paddingRight: '20px', paddingTop: '70px'}}>
+          <div id="tableContainer" style={{ width: '55%', marginLeft: '3%',marginRight: '0px', marginTop: '55px', paddingRight: '20px', paddingTop: '30px'}}>
+          <div style={{ marginBottom: '40px', marginTop: '1%', display: 'flex', gap: '20px' }}>
+            <div style={{ flex: '1' }}>
+              <Link to="/HomePage" className="part-linkA" style={{ textDecoration: 'none', color: 'black' }}>
+                <div style={{ backgroundColor: 'lightblue', borderRadius: '20px', border: '2px solid black', padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.3s' }}>
+                  Shoulder
+                </div>
+              </Link>
+            </div>
+            <div style={{ flex: '1' }}>
+              <Link to="/HomePage" className="part-linkB" style={{ textDecoration: 'none', color: 'black' }}>
+                <div style={{ backgroundColor: 'lightblue', borderRadius: '20px', border: '2px solid black', padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.3s' }}>
+                  Body
+                </div>
+              </Link>
+            </div>
+            <div style={{ flex: '1' }}>
+              <Link to="/HomePage" className="part-linkC" style={{ textDecoration: 'none', color: 'black' }}>
+                <div style={{ backgroundColor: 'lightblue', borderRadius: '20px', border: '2px solid black', padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.3s' }}>
+                  Leg
+                </div>
+              </Link>
+            </div>
+          </div>
+
+
+
+
+
             {showConfirmation && <h1>Confirmation</h1>}
             <div style={{ display: 'flex', marginBottom: '20px'}}>
             <div style={{ marginRight: '20px' }}>
