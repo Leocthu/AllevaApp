@@ -20,9 +20,10 @@
   function TableComponent() {
     const [nurseName, setNurseName] = useState('');
     const [orderDate, setOrderDate] = useState('');
-    const [compName, setCompName] = useState('');
+    
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [chainName, setChainName] = useState('');
+    const [compName, setCompName] = useState('');
 
 
 
@@ -36,30 +37,44 @@
       }
       const userId = user.uid;
       const compRef = ref(database, `users/${userId}/Company`);
+      
       get(compRef)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            setCompName(snapshot.val());
+        .then((compSnapshot) => {
+          if (compSnapshot.exists()) {
+            setCompName(compSnapshot.val());
           }
         })
         .catch((error) => {
           console.error('Error fetching company name:', error);
         });
+    }, []);
+    
+    const handleFindChain = useCallback(() => {
+      const user = auth.currentUser;
+      if (!user) {
+        console.log('User not authenticated');
+        return;
+      }
+      const userId = user.uid;
       const chainRef = ref(database, `users/${userId}/Chain`);
+      
       get(chainRef)
-        .then((snapshot) => {
-          if(snapshot.exists()){
-            setChainName(snapshot.val());
+        .then((chainSnapshot) => {
+          if (chainSnapshot.exists()) {
+            setChainName(chainSnapshot.val());
           }
         })
+        .catch((error) => {
+          console.error('Error fetching chain name:', error);
+        });
     }, []);
-
 
     useEffect(() => {
       $(document).ready(function() {
         $('#myTable').DataTable();
       });
       handleFindComp();
+      handleFindChain();
   
 
       const updateCurrentDate = () => {
@@ -75,7 +90,7 @@
       updateCurrentDate();
 
 
-    }, [handleFindComp]);
+    }, [handleFindComp, handleFindChain]);
 
     const [tableData, setTableData] = useState([
       { id: 1, name: 'Thigh Below Crotch Circumference', userInput1: '', userInput2: ''},
@@ -119,6 +134,9 @@
 
 
     const handleOrderbtn = async () => {
+
+      await handleFindComp();
+      await handleFindChain();
       const user = auth.currentUser;
       if (!user){
         console.log('User not authenticated');
@@ -256,7 +274,7 @@
       });
 
     
-
+    
 
 
       // Get a reference to the 'orders' node in the Firebase Realtime Database
@@ -278,16 +296,23 @@
           console.error('order is not pending');
         })
 
+
+      
+      console.log("Company Name:", compName); 
+      console.log("Chain Name:", chainName);
+
+      
+
+      const orderNumRef = ref(database, `company/${compName}/chains/${chainName}/orderNum`);
+      await set(orderNumRef, orderNum); // Update order number
+
       
       // Push the data to the 'orders' node in the database
       push(ordersRef, ordersData)
         .then(() => {
           // Data saved successfully, you can perform any additional actions here
           console.log('Data saved successfully!');
-          handleClearBtn(); // Call handleClearBtn to reset the table data
-          setCompName(''); // Reset the input variables
-          setNurseName('');
-          setOrderDate('');
+          handleClearBtn();
 
         })
         .catch((error) => {
@@ -312,9 +337,7 @@
         userInput1: '',
         userInput2: '',
       }));
-      setCompName('');
-      setOrderDate('');
-      setNurseName('');
+     
 
       // Update the state with the cleared data
       setTableData(clearedData);
@@ -463,7 +486,7 @@
           </div>
           {showConfirmation ? (
             <div style={{ marginBottom: '250px' }}>
-              <img src={dicut} alt="dicutpic" style={{ width: '140%', height: 'auto', paddingTop: '40px', marginRight: '25%'}} />
+              <img src={dicut} alt="dicutpic" style={{ width: '55%', height: 'auto', paddingTop: '10px', marginRight: '20%'}} />
             </div>
           ) : (
             <div style={{ marginBottom: '250px' }}>
