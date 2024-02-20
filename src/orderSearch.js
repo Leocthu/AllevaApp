@@ -118,7 +118,6 @@ function OrderSearch() {
                             </table>
                         </div>
                         <div>
-                            <img src={imageSrc} alt="bodypic" style={{ width: '22%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
                             <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
                         </div>
                     </div>

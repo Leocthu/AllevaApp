@@ -95,7 +95,7 @@ function AdminSignUp() {
                 email: email,
                 mobile: mobile,
                 CompanyName: CompanyName,
-                role: 'client'
+                role: 'admin'
               };
   
               // Write user data under the newly created company node

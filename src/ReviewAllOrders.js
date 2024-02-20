@@ -248,7 +248,7 @@ function ReviewAllOrders() {
         {selectedOrder && (
           <div>
             <h2>Order Details</h2>
-            <div className='tableContainer' style={{ marginTop: '50px', marginRight: '300px'}}>
+            <div className='tableContainer' style={{ marginTop: '50px', marginLeft: '21.5%'}}>
                 <table className='order-table'>
                     <thead>
                         <tr>
@@ -276,7 +276,7 @@ function ReviewAllOrders() {
               </div>
             </div>
 
-            <img src={imageSrc} alt="bodypic" style={{ width: '22%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
+            <img src={imageSrc} alt="bodypic" style={{ width: '53%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
             <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
           </div>
         )}

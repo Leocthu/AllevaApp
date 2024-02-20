@@ -171,7 +171,7 @@
         // Logic for order confirmation email
         const emailParams = {
           Destination: {
-            ToAddresses: [recipientEmail],
+            ToAddresses: [recipientEmail, 'allevamanufacturing.eric@gmail.com'],
           },
           Message: {
             Body: {
