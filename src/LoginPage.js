@@ -14,7 +14,7 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const handleSignIn = (event) => {
-    event.preventDefault();
+    
     auth.signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
         // User successfully logged in
@@ -36,6 +36,12 @@ function LoginPage() {
     navigate('/UserSignUp');
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSignIn();
+    }
+  };
+
   return (
     
       <div className="login-container">
@@ -55,6 +61,7 @@ function LoginPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={(e) => handleKeyPress(e)} 
           />
           {errorMessage && <p className="error-message">{errorMessage}</p>}
           <button className ="signin-btn" onClick={handleSignIn}>Sign In</button>

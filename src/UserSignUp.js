@@ -78,7 +78,7 @@
       }, [selectedCompany]);
 
       const handleSignUp = (event) => {
-        event.preventDefault();
+        
 
         if (showAddChainInput && selectedChain.trim() !== '') {
           const chainName = selectedChain.trim();
@@ -166,6 +166,12 @@
         setShowAddChainInput(true);
       };
 
+      const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+          handleSignUp();
+        }
+      };
+
       return (
         <div className="SignUp-container">
           <header className="SignUp-header">
@@ -237,6 +243,7 @@
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={(e) => handleKeyPress(e)} 
             />
             <button className="signupbtn" onClick={handleSignUp}>
               Sign Up
