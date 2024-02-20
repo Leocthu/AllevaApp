@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import allevamedicallogo from './allevamedicallogo.png';
 import { database } from './firebase';
-import { ref, get } from 'firebase/database';
+import { ref, get, remove } from 'firebase/database';
 import HamburgerMenu from './hamburgerMenu';
 import './CompletedOrders.css'; // You can create a separate CSS file if needed
 import imageSrc from './BodyReference.jpg';
@@ -55,6 +55,25 @@ function CompletedOrders() {
         }
     };
 
+    const handleDelApproved = async () => {
+        if (selectedOrder) {
+          try {
+  
+            // Delete the selected order from the pending orders node
+            await remove(ref(database, `admin/Completed Orders/${selectedOrderId}`));
+            
+            // Clear the selected order from state
+            setSelectedOrder(null);
+            setSelectedOrderId(null); // Clear the selected order ID
+            
+            // Refresh the pending orders list
+            await fetchCompletedOrders();
+          } catch (error) {
+            console.error('Error approving order:', error);
+          }
+        }
+    };
+
     return (
         <div>
             <header className="login-header" style={{ backgroundColor: 'lightblue' }}>
@@ -103,7 +122,9 @@ function CompletedOrders() {
                             </tbody>
                         </table>
                     </div>
-
+                    <div className="buttonContainer">   
+                        <button className="removeBtn" onClick={handleDelApproved}>Delete</button>
+                    </div>
                     <img src={imageSrc} alt="bodypic" style={{ width: '55%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
                     <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
                 </div>
