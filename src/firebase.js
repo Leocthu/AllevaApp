@@ -3,6 +3,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { getDatabase } from "firebase/database";
 
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,6 +23,15 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const auth = app.auth(); 
 const database = getDatabase(app);
+
+
+auth.setPersistence('local')
+  .then(() => {
+    // Local persistence enabled
+  })
+  .catch((error) => {
+    console.error('Error enabling persistence:', error);
+  });
 
 
 export { auth, database };
