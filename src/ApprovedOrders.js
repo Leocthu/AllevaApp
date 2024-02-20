@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import allevamedicallogo from './allevamedicallogo.png';
 import { database } from './firebase';
-import { ref, get, remove } from 'firebase/database';
+import { ref, get, remove, set } from 'firebase/database';
 import HamburgerMenu from './hamburgerMenu';
 import './ReviewAllOrders.css';
 import imageSrc from './BodyReference.jpg';
@@ -106,6 +106,14 @@ function ApprovedOrders() {
                 secretAccessKey: 'Ra8M1QAZzYs1ySj/uDRjW3VxvDiUPg4xyqJ+2k7a',
               }
             });
+
+            const orderSnapshot = await get(ref(database, `admin/Approved Orders/${selectedOrderId}`));
+            const orderData = orderSnapshot.val();
+
+            // Move the order to the Completed Orders node
+            if (orderData) {
+                await set(ref(database, `admin/Completed Orders/${selectedOrderId}`), orderData);
+            }
 
             sendOrderCompleted('allevamanufacturing.eric@gmail.com');
   

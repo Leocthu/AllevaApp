@@ -10,6 +10,7 @@ import ReviewAllOrders from './ReviewAllOrders';
 import ApprovedOrders from './ApprovedOrders';
 import UserProfile from './UserProfile';
 import AdminSignUp from './AdminSignUp';
+import CompletedOrders from './CompletedOrders';
 
 
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="/ApprovedOrders" element={<ApprovedOrders />} />
           <Route path="/UserProfile" element={<UserProfile />} />
           <Route path="/AdminSignUp" element={<AdminSignUp />} />
+          <Route path="/CompletedOrders" element={<CompletedOrders />} />
         </Routes>
       </div>
     </Router>

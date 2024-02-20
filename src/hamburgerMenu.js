@@ -82,6 +82,9 @@ function HamburgerMenu() {
             {userRole === 'admin' && (
               <Link to="/ApprovedOrders">Approved Orders</Link>
             )}
+            {userRole === 'admin' && (
+              <Link to="/CompletedOrders">Completed Orders</Link>
+            )}
             <button className="sign-out-button" onClick={handleSignOut}>Sign Out</button> 
         </li>
       </ul>

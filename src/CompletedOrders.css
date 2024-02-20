@@ -1,0 +1,25 @@
+.order-table {
+    border-collapse: collapse;
+    width: 75%;
+    border: 2px solid #ddd; /* Outline style */
+    margin-right: 30px;
+}
+  
+.order-table th,
+.order-table td {
+    border: 1px solid #ddd; /* Cell border style */
+    padding: 8px;
+    text-align: left;
+}
+  
+.order-table th {
+    background-color: #f2f2f2;
+}
+
+.order-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between items */
+    margin-left: 73px;
+}
+  
