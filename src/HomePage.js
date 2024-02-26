@@ -490,7 +490,7 @@
             </div>
           ) : (
             <div style={{ marginBottom: '250px' }}>
-              <img src={imageSrc} alt="bodypic" style={{ width: '97%', height: 'auto', paddingTop: '40px', marginRight: '75px', marginLeft: '10px'}} />
+              <img src={imageSrc} alt="bodypic" style={{ width: '97%', height: 'auto', paddingTop: '40px', marginLeft: '10px'}} />
             </div>
           )}
           
