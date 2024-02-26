@@ -136,6 +136,12 @@ function AdminSignUp() {
     navigate('/');
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSignUp();
+    }
+  };
+
   return (
     <div className="SignUp-container">
         <header className = "SignUp-header">
@@ -173,6 +179,7 @@ function AdminSignUp() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={(e) => handleKeyPress(e)} 
           />
         
         <button className ="signupbtn"onClick={handleSignUp}>Sign Up</button>
