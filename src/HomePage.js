@@ -6,7 +6,8 @@
   import imageSrc from './BodyReference.jpg';
   import allevamedicallogo from './allevamedicallogo.png';
   import dicut from './dicut.jpg';
-  import { Link } from 'react-router-dom';
+  import { Link, useNavigate } from 'react-router-dom';
+
 
   import { ref, get, set } from 'firebase/database';
   import { auth, database } from './firebase';
@@ -32,6 +33,8 @@
     const [inputError, setInputError] = useState('');
 
     const [selectedButton, setSelectedButton] = useState('');
+
+    const navigate = useNavigate();
 
     const handleButtonClick = (buttonName) => {
       setSelectedButton(buttonName);
@@ -361,6 +364,7 @@
           console.error('Error saving data:', error);
         });
         setShowConfirmation(false);
+        navigate('/UserProfile');
     };
 
     const handleBackBtn = () => {

@@ -15,6 +15,8 @@ function ReviewAllOrders() {
     const [pendingOrders, setPendingOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [selectedOrderId, setSelectedOrderId] = useState(null); // Store selected order ID
+
+    const [orderInfo, setOrderInfo] = useState('');
     
     
     const fetchPendingOrders = async () => {
@@ -57,6 +59,13 @@ function ReviewAllOrders() {
         if (orderDetails) {
           setSelectedOrder(orderDetails);
         }
+
+        const orderSnap = await get(ref(database, `admin/Pending Orders/${orderId}`));
+        const orderInf = orderSnap.val();
+        if (orderInf){
+          setOrderInfo(orderInf);
+        }
+
       } catch (error) {
         console.error('Error fetching order details:', error);
       }
@@ -167,10 +176,13 @@ function ReviewAllOrders() {
         if (selectedOrder) {
           try {
             // Create a reference to the approved orders node
-            const approvedOrdersRef = ref(database, `admin/Approved Orders/${selectedOrderId}`);
+            const approvedOrdersRef = ref(database, `admin/Approved Orders/${selectedOrderId}/tableData`);
             
             // Push the selected order to the approved orders node
             await set(approvedOrdersRef, selectedOrder);
+
+            const approvedOrderInfo = ref(database, `admin/Approved Orders/${selectedOrderId}`);
+            await set(approvedOrderInfo, orderInfo);
             
             // Delete the selected order from the pending orders node
             await remove(ref(database, `admin/Pending Orders/${selectedOrderId}`));

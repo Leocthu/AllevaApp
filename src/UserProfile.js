@@ -113,28 +113,36 @@ function UserProfile() {
   const AhandleOrderClick = async (orderId) => {
     setSelectedOrderId(orderId);
     try {
-        const orderSnapshot = await get(ref(database, `admin/Approved Orders/${orderId}`));
-        const orderDetails = orderSnapshot.val();
 
-        if (orderDetails) {
-            setSelectedOrder(orderDetails);
-        }
-
-        const orderInfoSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}`));
-        const orderInfo = orderInfoSnapshot.val();
-
-        if (orderInfo) {
-            setOrderInfo(orderInfo);
-        }
+      setSelectedOrder(null);
+      setOrderInfo(null);
+      
+      const orderSnapshot = await get(ref(database, `admin/Approved Orders/${orderId}/tableData`));
+      const orderDetails = orderSnapshot.val();
+  
+      if (orderDetails) {
+        setSelectedOrder(orderDetails);
+      }
+  
+      const orderInfoSnapshot = await get(ref(database, `admin/Approved Orders/${orderId}`));
+      const orderInfo = orderInfoSnapshot.val();
+  
+      if (orderInfo) {
+        setOrderInfo(orderInfo);
+      }
     } catch (error) {
-        console.error('Error fetching order details:', error);
+      console.error('Error fetching order details:', error);
     }
-};
-
-
+  };
+  
   const PhandleOrderClick = async (orderId) => {
     setSelectedOrderId(orderId);
     try {
+
+      setSelectedOrder(null);
+      setOrderInfo(null);
+
+
       const orderSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}/tableData`));
       const orderDetails = orderSnapshot.val();
   
@@ -152,6 +160,7 @@ function UserProfile() {
       console.error('Error fetching order details:', error);
     }
   };
+  
   
 
   const matchingPendingOrders = [];

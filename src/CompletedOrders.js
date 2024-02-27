@@ -44,7 +44,7 @@ function CompletedOrders() {
     const handleOrderClick = async (orderId) => {
         setSelectedOrderId(orderId);
         try {
-            const orderSnapshot = await get(ref(database, `admin/Completed Orders/${orderId}`));
+            const orderSnapshot = await get(ref(database, `admin/Completed Orders/${orderId}/tableData`));
             const orderDetails = orderSnapshot.val();
 
             if (orderDetails) {
