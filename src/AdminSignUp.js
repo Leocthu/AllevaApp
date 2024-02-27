@@ -23,6 +23,7 @@ function AdminSignUp() {
   const [firstName, setFirstName] = useState(''); // Add state for first name
   const [CompanyName, setCompany] = useState(''); // Add state for company
   const [mobile, setMobile] = useState(''); // Add state for mobile phone number
+  const [error, setError] = useState(null);
 
 
   const navigate = useNavigate();
@@ -72,6 +73,7 @@ function AdminSignUp() {
                 })
                 .catch((error) => {
                   console.error('Error writing data:', error);
+                  setError(error.message);
                 });
 
 
@@ -79,6 +81,7 @@ function AdminSignUp() {
             })
             .catch((error) => {
               console.log('Sign up error:', error);
+              setError(error.message);
             });
         } else {
           set(companyRef, CompanyName)
@@ -114,19 +117,22 @@ function AdminSignUp() {
                 })
                 .catch((error) => {
                   console.error('Error writing data:', error);
+                  setError(error.message);
                 });
 
 
 
-              navigate('/HomePage');
+              navigate('/UserProfile');
             })
             .catch((error) => {
               console.log('Sign up error:', error);
+              setError(error.message);
             });
         }
       })
       .catch((error) => {
         console.log('Error checking company:', error);
+        setError(error.message);
       });
   };
   
@@ -181,6 +187,8 @@ function AdminSignUp() {
             onChange={(e) => setPassword(e.target.value)}
             onKeyPress={(e) => handleKeyPress(e)} 
           />
+
+        {error && <div className="error-message">{error}</div>}
         
         <button className ="signupbtn"onClick={handleSignUp}>Sign Up</button>
           

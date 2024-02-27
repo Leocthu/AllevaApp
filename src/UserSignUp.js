@@ -37,6 +37,7 @@
       const [companyList, setCompanyList] = useState([]);
       const [chainList, setChainList] = useState([]);
       const [showAddChainInput, setShowAddChainInput] = useState(false); // State to control the input box visibility
+      const [error, setError] = useState(null);
 
 
       const navigate = useNavigate();
@@ -55,6 +56,8 @@
           })
           .catch((error) => {
             console.log('Error fetching companies:', error);
+            setError(error.message);
+            
           });
       }, []);
 
@@ -73,6 +76,7 @@
             })
             .catch((error) => {
               console.log('Error fetching chains:', error);
+              setError(error.message);
             });
         }
       }, [selectedCompany]);
@@ -92,6 +96,7 @@
             })
             .catch((error) => {
               console.error('Error adding new chain:', error);
+              setError(error.message);
             });
           } else {
             console.log('Chain already exists:', chainName);
@@ -128,10 +133,12 @@
                       })
                       .catch((error) => {
                         console.error('Error sending verification email:', error);
+                        setError(error.message);
                       });
                   })
                   .catch((error) => {
                     console.error('Error updating email address:', error);
+                    setError(error.message);
                   });
 
                   const users = auth.currentUser;
@@ -143,18 +150,22 @@
                     console.log('User data updated successfully.');
                   }).catch((error) => {
                     console.error('Error updating user data:', error);
+                    setError(error.message);
                   });
-                  navigate('/HomePage');
+                  navigate('/UserProfile');
                 })
                 .catch((error) => {
                   console.log('Sign up error:', error);
+                  setError(error.message);
                 });
             } else {
               console.log('Company does not exist:', selectedCompany);
+              
             }
           })
           .catch((error) => {
             console.log('Error checking company:', error);
+            setError(error.message);
           });
       };
 
@@ -245,6 +256,8 @@
               onChange={(e) => setPassword(e.target.value)}
               onKeyPress={(e) => handleKeyPress(e)} 
             />
+
+            {error && <div className="error-message">{error}</div>}     
             <button className="signupbtn" onClick={handleSignUp}>
               Sign Up
             </button>

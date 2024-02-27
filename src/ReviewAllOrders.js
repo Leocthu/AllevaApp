@@ -51,7 +51,7 @@ function ReviewAllOrders() {
     const handleOrderClick = async (orderId) => {
       setSelectedOrderId(orderId);
       try {
-        const orderSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}`));
+        const orderSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}/tableData`));
         const orderDetails = orderSnapshot.val();
   
         if (orderDetails) {

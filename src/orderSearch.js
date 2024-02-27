@@ -6,8 +6,8 @@ import 'datatables.net-dt';
 import allevamedicallogo from './allevamedicallogo.png';
 import HamburgerMenu from './hamburgerMenu';
 import './orderSearch.css';
-import imageSrc from './BodyReference.jpg';
-import dicut from './dicut.jpg';
+
+
 
 
 function OrderSearch() {
@@ -16,60 +16,47 @@ function OrderSearch() {
     const [searchedOrder, setSearchedOrder] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSearch = () => {
-
-        const user = auth.currentUser;
-        const userId = user.uid;
-        let CompanyName = "";
-        let chainName = "";
-        
+    const handleSearch = async () => {
         try {
-            if (userId && searchQuery) {
-              // Construct the reference to the specified user's path
-              const userRef = ref(database, 'users/' + userId);
-        
-              // Retrieve the user's data and company name
-              get(userRef)
-                .then((snapshot) => {
-                  if (snapshot.exists()) {
-                    const userData = snapshot.val();
-                    CompanyName = userData.Company; // Set CompanyName inside the scope
-                    chainName = userData.Chain;
-
-                  } else {
-                    console.log('User data not found.');
-                  }
-        
-                  // Continue with the rest of the logic
-                  const orderRef = ref(database, `company/${CompanyName}/chains/${chainName}/${userId}/Orders/${searchQuery}`);
-                  console.log(orderRef.toString());
-                  get(orderRef)
-                    .then(orderSnapshot => {
-                        if (orderSnapshot.exists()) {
-                            setErrorMessage('');
-                            const orderData = orderSnapshot.val();
-                            // Extract the data from the nested structure and convert it to an array
-                            const extractedData = Object.values(orderData); // Assuming each order is an object
-                            setSearchedOrder(extractedData);
-                        } else {
-                            console.log('Order not found');
-                            setErrorMessage('Order not found. Please try again!');
-                        }
-                    })
-                    .catch(error => {
-                      console.error('Error fetching order data:', error);
-                    });
-                })
-                .catch((error) => {
-                  console.error('Error retrieving user data:', error);
-                });
-            } else {
-              console.log('Invalid userId or searchQuery');
+            const user = auth.currentUser;
+            const userId = user.uid;
+    
+            if (!userId || !searchQuery) {
+                console.log('Invalid userId or searchQuery');
+                return;
             }
-          } catch (error) {
-            console.error('Error fetching order data:', error);
-          }
+    
+            const userRef = ref(database, 'users/' + userId);
+            const snapshot = await get(userRef);
+    
+            if (!snapshot.exists()) {
+                console.log('User data not found.');
+                return;
+            }
+    
+            const userData = snapshot.val();
+            const CompanyName = userData.Company;
+            const chainName = userData.Chain;
+    
+            const orderRef = ref(database, `company/${CompanyName}/chains/${chainName}/${userId}/Orders/${searchQuery}/tableData`);
+            console.log(orderRef.toString());
+            const orderSnapshot = await get(orderRef);
+    
+            if (orderSnapshot.exists()) {
+                setErrorMessage('');
+                const tableData = orderSnapshot.val();
+                const entries = Object.entries(tableData);
+                setSearchedOrder(entries);
+            } else {
+                console.log('Table data not found');
+                setErrorMessage('Table data not found. Please try again!');
+            }
+        } catch (error) {
+            console.error('Error fetching table data:', error);
+        }
     };
+    
+      
 
     
 
@@ -98,30 +85,28 @@ function OrderSearch() {
                             <h2>Order Details</h2>
                             <table className="table">
                                 <thead>
-                                <tr>
-                                    <th>Body Number</th>
-                                    <th>Body Part</th>
-                                    <th>Left Measurement</th>
-                                    <th>Right Measurement</th>
-                                </tr>
+                                    <tr>
+                                        <th>Body Number</th>
+                                        <th>Body Part</th>
+                                        <th>Left Measurement</th>
+                                        <th>Right Measurement</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    {searchedOrder[0].map((row, index) => (
+                                    {searchedOrder.map(([key, value], index) => (
                                         <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{row.name}</td>
-                                        <td>{row.userInput1}</td>
-                                        <td>{row.userInput2}</td>
+                                            <td>{index + 1}</td>
+                                            <td>{value.name}</td>
+                                            <td>{value.userInput1}</td>
+                                            <td>{value.userInput2}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
-                        <div>
-                            <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
-                        </div>
                     </div>
                 )}
+
             </div>
         </div>
     );

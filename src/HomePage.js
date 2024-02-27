@@ -8,7 +8,7 @@
   import dicut from './dicut.jpg';
   import { Link } from 'react-router-dom';
 
-  import { ref, push, get, set } from 'firebase/database';
+  import { ref, get, set } from 'firebase/database';
   import { auth, database } from './firebase';
   import HamburgerMenu from './hamburgerMenu';
 
@@ -24,8 +24,24 @@
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [chainName, setChainName] = useState('');
     const [compName, setCompName] = useState('');
+    const [pumpSize, setPumpSize] = useState('');
+    const [sleeveType, setSleeve] = useState('');
+
+    const [selectedButton, setSelectedButton] = useState('');
+
+    const handleButtonClick = (buttonName) => {
+      setSelectedButton(buttonName);
+      setSleeve(buttonName);
+    };
+
+    
+
+    
 
 
+    const handlePumpSizeSelection = (size) => {
+      setPumpSize(size);
+    };
 
 
 
@@ -239,6 +255,8 @@
           }
         });
       };
+
+      alert('Order placed successfully. Email confirmation sent.');
     
 
     
@@ -275,18 +293,36 @@
 
     
     
-
+      let dataToSave;
+      if (sleeveType === 'Leg') {
+        dataToSave = tableData.slice(0, 9).map((row) => ({
+          name: row.name,
+          userInput1: row.userInput1,
+          userInput2: row.userInput2,
+        }));
+      } else if (sleeveType === 'Pants') {
+        dataToSave = tableData.map((row) => ({
+          name: row.name,
+          userInput1: row.userInput1,
+          userInput2: row.userInput2,
+        }));
+      } else {
+        // Handle the case when sleeveType is neither 'Leg' nor 'Pants'
+        console.error('Invalid sleeve type:', sleeveType);
+        return;
+      }
 
       // Get a reference to the 'orders' node in the Firebase Realtime Database
       const ordersRef = ref(database, `company/${compName}/chains/${chainName}/${userId}/Orders/${uniqId}`);
       const adminRef = ref(database, `admin/Pending Orders/${uniqId}`);
 
       // Prepare the data to be saved 
-      const ordersData = tableData.map((row) => ({
-        name: row.name,
-        userInput1: row.userInput1,
-        userInput2: row.userInput2,
-      }));
+      const ordersData = {
+        pumpSize: pumpSize,
+        orderDate: orderDate,
+        SleeveType: sleeveType,
+        tableData: dataToSave
+      };
 
       set(adminRef, ordersData)
         .then(() => {
@@ -308,7 +344,7 @@
 
       
       // Push the data to the 'orders' node in the database
-      push(ordersRef, ordersData)
+      set(ordersRef, ordersData)
         .then(() => {
           // Data saved successfully, you can perform any additional actions here
           console.log('Data saved successfully!');
@@ -342,6 +378,37 @@
       // Update the state with the cleared data
       setTableData(clearedData);
     };
+
+    const renderTableRows = () => {
+      if (selectedButton === 'Leg') {
+
+        return tableData.slice(0, 9).map(renderTableRow);
+      } else if (selectedButton === 'Pants') {
+      
+        return tableData.map(renderTableRow);
+      }
+    };
+  
+    const renderTableRow = (row, index) => (
+      <tr key={row.id}>
+        <td>{index + 1}</td>
+        <td>{row.name}</td>
+        <td>
+          <input
+            type="text"
+            value={row.userInput1}
+            onChange={(e) => handleInputChange(e, index, 'userInput1')}
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            value={row.userInput2}
+            onChange={(e) => handleInputChange(e, index, 'userInput2')}
+          />
+        </td>
+      </tr>
+    );
     
 
 
@@ -359,30 +426,109 @@
           
         </header>
         <div style={{ display: 'flex', alignItems: 'flex-start', backgroundColor: 'light grey'}}>
+          
           <div id="tableContainer" style={{ width: '55%', marginLeft: '3%',marginRight: '0px', marginTop: '55px', paddingRight: '20px', paddingTop: '30px'}}>
-          <div style={{ marginBottom: '40px', marginTop: '1%', display: 'flex', gap: '20px' }}>
-            <div style={{ flex: '1' }}>
-              <Link to="/HomePage" className="part-linkA" style={{ textDecoration: 'none', color: 'black' }}>
-                <div style={{ backgroundColor: 'lightblue', borderRadius: '20px', border: '2px solid black', padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.3s' }}>
-                  Shoulder
-                </div>
-              </Link>
+          <div style={{ marginBottom: '40px', display: 'flex', gap: '20px' }}>
+            <div style={{ flex: '1' }} onClick={() => handlePumpSizeSelection('6')}>
+              <div
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: pumpSize === '6' ? 'lightblue' : 'white',
+                  borderRadius: '20px',
+                  border: '2px solid black',
+                  padding: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background-color 0.3s',
+                  
+                }}
+              >
+                <button style={{ fontSize: '15px', border: 'none', background: 'none', cursor: 'pointer' }}>Pump Size Six</button>
+              </div>
             </div>
-            <div style={{ flex: '1' }}>
-              <Link to="/HomePage" className="part-linkB" style={{ textDecoration: 'none', color: 'black' }}>
-                <div style={{ backgroundColor: 'lightblue', borderRadius: '20px', border: '2px solid black', padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.3s' }}>
-                  Body
-                </div>
-              </Link>
-            </div>
-            <div style={{ flex: '1' }}>
-              <Link to="/HomePage" className="part-linkC" style={{ textDecoration: 'none', color: 'black' }}>
-                <div style={{ backgroundColor: 'lightblue', borderRadius: '20px', border: '2px solid black', padding: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.3s' }}>
-                  Leg
-                </div>
-              </Link>
+
+            <div style={{ flex: '1' }} onClick={() => handlePumpSizeSelection('8')}>
+              <div
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: pumpSize === '8' ? 'lightblue' : 'white',
+                  borderRadius: '20px',
+                  border: '2px solid black',
+                  padding: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background-color 0.3s',
+                }}
+              >
+                <button style={{ fontSize: '15px', cursor: 'pointer', border: 'none', background: 'none' }}>Pump Size Eight</button>
+              </div>
             </div>
           </div>
+
+          <div style={{ marginBottom: '40px', display: 'flex', gap: '20px' }}>
+            <div style={{ flex: '1' }} onClick={() => handleButtonClick('Shoulder')}>
+              <div
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: selectedButton === 'Shoulder' ? 'lightblue' : 'white',
+                  borderRadius: '20px',
+                  border: '2px solid black',
+                  padding: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background-color 0.3s',
+                }}
+              >
+                <Link to="/HomePage" className="part-linkA" style={{ fontSize: '15px', textDecoration: 'none', color: 'black' }}>
+                  Shoulder
+                </Link>
+              </div>
+            </div>
+
+            <div style={{ flex: '1' }} onClick={() => handleButtonClick('Pants')}>
+              <div
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: selectedButton === 'Pants' ? 'lightblue' : 'white',
+                  borderRadius: '20px',
+                  border: '2px solid black',
+                  padding: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background-color 0.3s',
+                }}
+              >
+                <Link to="/HomePage" className="part-linkB" style={{ fontSize: '15px', textDecoration: 'none', color: 'black' }}>
+                  Pants
+                </Link>
+              </div>
+            </div>
+
+            <div style={{ flex: '1' }} onClick={() => handleButtonClick('Leg')}>
+              <div
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: selectedButton === 'Leg' ? 'lightblue' : 'white',
+                  borderRadius: '20px',
+                  border: '2px solid black',
+                  padding: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background-color 0.3s',
+                }}
+              >
+                <Link to="/HomePage" className="part-linkC" style={{ fontSize: '15px', textDecoration: 'none', color: 'black' }}>
+                  Leg
+                </Link>
+              </div>
+            </div>
+          </div>
+
 
 
 
@@ -411,29 +557,17 @@
             </div>
             
             {showConfirmation ? (
-              <div>
-                
-                <table style={{ width: '100%' }}>
-                  <thead>
-                    <tr>
-                      <th>Body Number</th>
-                      <th>Body Part</th>
-                      <th>Left Measurement</th>
-                      <th>Right Measurement</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tableData.map((row, index) => (
-                      <tr key={row.id}>
-                        <td>{index + 1}</td>
-                        <td>{row.name}</td>
-                        <td>{row.userInput1}</td>
-                        <td>{row.userInput2}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <table style={{ width: '100%' }}>
+                <thead>
+                  <tr>
+                    <th>Body Number</th>
+                    <th>Body Part</th>
+                    <th>Left Measurement</th>
+                    <th>Right Measurement</th>
+                  </tr>
+                </thead>
+                <tbody>{renderTableRows()}</tbody>
+              </table>
             ) : (
               <table style={{ width: '100%' }}>
                 <thead>
@@ -444,28 +578,7 @@
                     <th>Right Measurement</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {tableData.map((row, index) => (
-                    <tr key={row.id}>
-                      <td>{index + 1}</td>
-                      <td>{row.name}</td>
-                      <td>
-                        <input
-                          type="text"
-                          value={row.userInput1}
-                          onChange={(e) => handleInputChange(e, index, 'userInput1')}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={row.userInput2}
-                          onChange={(e) => handleInputChange(e, index, 'userInput2')}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+                <tbody>{renderTableRows()}</tbody>
               </table>
             )}
   

@@ -4,10 +4,10 @@ import { database, auth } from './firebase';
 import { ref, get } from 'firebase/database';
 import HamburgerMenu from './hamburgerMenu';
 import './ReviewAllOrders.css';
-import imageSrc from './BodyReference.jpg';
-import dicut from './dicut.jpg';
+
 import { Link } from 'react-router-dom';
 import './UserProfile.css';
+
 
 
 function UserProfile() {
@@ -16,6 +16,7 @@ function UserProfile() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [userOrders, setUserOrders] = useState([]);
   const [selectedOrderId, setSelectedOrderId] = useState(null); // Store selected order ID
+  const [orderInfo, setOrderInfo] = useState(null);
 
 
   useEffect(() => {
@@ -118,6 +119,13 @@ function UserProfile() {
       if (orderDetails) {
         setSelectedOrder(orderDetails);
       }
+
+      const orderInfoSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}`));
+      const orderInfo = orderInfoSnapshot.val();
+  
+      if (orderInfo) {
+        setOrderInfo(orderInfo);
+      }
     } catch (error) {
       console.error('Error fetching order details:', error);
     }
@@ -126,16 +134,24 @@ function UserProfile() {
   const PhandleOrderClick = async (orderId) => {
     setSelectedOrderId(orderId);
     try {
-      const orderSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}`));
+      const orderSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}/tableData`));
       const orderDetails = orderSnapshot.val();
-
+  
       if (orderDetails) {
         setSelectedOrder(orderDetails);
+      }
+  
+      const orderInfoSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}`));
+      const orderInfo = orderInfoSnapshot.val();
+  
+      if (orderInfo) {
+        setOrderInfo(orderInfo);
       }
     } catch (error) {
       console.error('Error fetching order details:', error);
     }
   };
+  
 
   const matchingPendingOrders = [];
   for (const orderId of pendingOrders) {
@@ -207,10 +223,16 @@ function UserProfile() {
       </div>
 
 
-        {selectedOrder && (
+        {selectedOrder && orderInfo && (
           <div>
               <h2>Order Details</h2>
-              <div className='tableContainer' style={{ marginTop: '50px', marginLeft: '21.5%'}}>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+                <p style={{ marginRight: '20px' }}>Order Date: {orderInfo.orderDate}</p>
+                <p style={{ marginRight: '20px' }}>Pump Size: {orderInfo.pumpSize}</p>
+                <p>Sleeve Type: {orderInfo.SleeveType}</p>
+              </div>
+
+              <div className='tableContainer' style={{ marginTop: '10px', marginLeft: '21.5%'}}>
                   <table className='order-table'>
                       <thead>
                           <tr>
@@ -231,8 +253,6 @@ function UserProfile() {
                   </table>
                 
               </div>
-              <img src={imageSrc} alt="bodypic" style={{ width: '53%', height: 'auto', paddingRight: '40px', paddingLeft: '85px'}}/>
-              <img src={dicut} alt="dicutpic" style={{ width: '30%', height: 'auto', paddingLeft: '40px'}}/>
           </div>
         )}
     </div>
