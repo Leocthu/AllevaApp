@@ -387,15 +387,32 @@
         setShowConfirmation(false);
         return;
       } 
+
       // Check if any input fields in the table are empty
-      const isAnyFieldEmpty = tableData.some(row => !row.userInput1 || !row.userInput2);
-      if (isAnyFieldEmpty) {
-        setInputError("Please fill in all measurement fields");
-        setShowConfirmation(false);
-        return;
-      } else {
-        setInputError('');
+      console.log(sleeveType);
+      if (sleeveType === 'Leg'){
+        const isAnyFieldEmpty = tableData.slice(0, 9).some(row => !row.userInput1 || !row.userInput2);
+        if (isAnyFieldEmpty) {
+            setInputError("Please fill in all measurement fields for the first 9 rows");
+            setShowConfirmation(false);
+            return;
+        } else {
+            setInputError('');
+        }
       }
+      else{
+        const isAnyFieldEmpty = tableData.some(row => !row.userInput1 || !row.userInput2);
+        if (isAnyFieldEmpty) {
+          setInputError("Please fill in all measurement fields");
+          setShowConfirmation(false);
+          return;
+        } else {
+          setInputError('');
+        }
+      }
+
+
+     
     
       // If all validations pass, set showConfirmation to true
       setShowConfirmation(true);
