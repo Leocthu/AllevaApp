@@ -82,7 +82,10 @@
       }, [selectedCompany]);
 
       const handleSignUp = (event) => {
-        
+        if (!firstName || !selectedCompany || (!showAddChainInput && !selectedChain) || !email || !mobile || !password) {
+          setError("Please fill in all fields.");
+          return;
+        }
 
         if (showAddChainInput && selectedChain.trim() !== '') {
           const chainName = selectedChain.trim();

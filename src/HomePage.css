@@ -8,7 +8,7 @@
 .button-container {
   display: flex;
   justify-content: space-between;
-  margin: 50px;
+  margin: 20px;
 }
 
 /* Apply the common styles for all buttons */
@@ -47,3 +47,16 @@
 
 }
 
+.error-message-pump {
+  color: red;
+  margin-bottom: 10px;
+}
+.error-message-name {
+  color: red;
+  margin-top: 10px;
+}
+
+.error-message-input {
+  color: red;
+  margin-top: 10px;
+}

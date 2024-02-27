@@ -27,6 +27,10 @@
     const [pumpSize, setPumpSize] = useState('');
     const [sleeveType, setSleeve] = useState('');
 
+    const [error, setError] = useState('');
+    const [nameError, setNameError] = useState('');
+    const [inputError, setInputError] = useState('');
+
     const [selectedButton, setSelectedButton] = useState('');
 
     const handleButtonClick = (buttonName) => {
@@ -41,6 +45,7 @@
 
     const handlePumpSizeSelection = (size) => {
       setPumpSize(size);
+      setError('');
     };
 
 
@@ -363,8 +368,35 @@
     }
 
     const handleConfirmBtn = () => {
+      // Check if nurseName is empty
+      if (!nurseName) {
+        setNameError("Please enter your name");
+        setShowConfirmation(false);
+        return;
+      } else {
+        setNameError('');
+      }
+    
+      // Check if pumpSize is empty
+      if (!pumpSize) {
+        setError("Please choose a chamber size");
+        setShowConfirmation(false);
+        return;
+      } 
+      // Check if any input fields in the table are empty
+      const isAnyFieldEmpty = tableData.some(row => !row.userInput1 || !row.userInput2);
+      if (isAnyFieldEmpty) {
+        setInputError("Please fill in all measurement fields");
+        setShowConfirmation(false);
+        return;
+      } else {
+        setInputError('');
+      }
+    
+      // If all validations pass, set showConfirmation to true
       setShowConfirmation(true);
-    }
+    };
+    
 
     const handleClearBtn = () => {
       // Create a new array with empty input values for each row
@@ -428,7 +460,7 @@
         <div style={{ display: 'flex', alignItems: 'flex-start', backgroundColor: 'light grey'}}>
           
           <div id="tableContainer" style={{ width: '55%', marginLeft: '3%',marginRight: '0px', marginTop: '55px', paddingRight: '20px', paddingTop: '30px'}}>
-          <div style={{ marginBottom: '40px', display: 'flex', gap: '20px' }}>
+          <div style={{ marginBottom: '20px', display: 'flex', gap: '20px' }}>
             <div style={{ flex: '1' }} onClick={() => handlePumpSizeSelection('6')}>
               <div
                 style={{
@@ -465,7 +497,10 @@
                 <button style={{ fontSize: '15px', cursor: 'pointer', border: 'none', background: 'none' }}>Pump Size Eight</button>
               </div>
             </div>
+            
           </div>
+
+          {error && <div className="error-message-pump">{error}</div>}
 
           <div style={{ marginBottom: '40px', display: 'flex', gap: '20px' }}>
             <div style={{ flex: '1' }} onClick={() => handleButtonClick('Shoulder')}>
@@ -580,7 +615,13 @@
                 </thead>
                 <tbody>{renderTableRows()}</tbody>
               </table>
+              
             )}
+
+            {nameError && <div className="error-message-name">{nameError}</div>}  
+            {inputError && <div className="error-message-input">{inputError}</div>}
+
+            
   
             <div className="button-container">
               <button className="clearbtn" onClick={handleClearBtn}>Clear</button>
@@ -592,10 +633,6 @@
                 <button className="Orderbtn" onClick={handleOrderbtn}>Place Order</button>
               )}
             </div>
-            
-
-  
-            
           </div>
           {showConfirmation ? (
             <div style={{ marginBottom: '250px' }}>
