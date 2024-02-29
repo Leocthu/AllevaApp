@@ -6,7 +6,7 @@ import './UserSignUp.css'
 import { ref, set, get } from "firebase/database";
 
 function writeUserData(userId, CompanyName, name, email, mobile, role){
-  const reference = ref(database, 'company/' + CompanyName + '/' + userId);
+  const reference = ref(database, `company/${CompanyName}/chains/${CompanyName}/${userId}`);
   set(reference,{
     name: name,
     username: email,
@@ -29,7 +29,6 @@ function AdminSignUp() {
   const navigate = useNavigate();
 
   const handleSignUp = (event) => {
-    event.preventDefault();
     
     // Check if the company already exists in the database
     const companyRef = ref(database, 'company/' + CompanyName);
