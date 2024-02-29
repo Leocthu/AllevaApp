@@ -29,6 +29,11 @@ function AdminSignUp() {
   const navigate = useNavigate();
 
   const handleSignUp = (event) => {
+
+    if (!firstName || !CompanyName || !email || !mobile || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
     
     // Check if the company already exists in the database
     const companyRef = ref(database, 'company/' + CompanyName);
