@@ -52,6 +52,8 @@ function ReviewAllOrders() {
         const orderSnapshot = await get(ref(database, `admin/Pending Orders/${orderId}`));
         const orderDetails = orderSnapshot.val();
   
+
+
         if (orderDetails) {
           setSelectedOrder(orderDetails);
         }
@@ -59,6 +61,9 @@ function ReviewAllOrders() {
         console.error('Error fetching order details:', error);
       }
     };
+
+    //just a comment
+    
 
     const handleApproval = async () => {
         if (selectedOrder) {
